@@ -469,32 +469,6 @@ function SignupContent() {
               </div>
             </div>
 
-            {/* ================= OCCASION TYPE SELECTOR BAR ================= */}
-            <div className="max-w-3xl mx-auto">
-              <div className="p-1.5 rounded-2xl bg-white border border-[#E8DDCF] shadow-soft-sm flex items-center justify-between gap-1 overflow-x-auto">
-                {(Object.keys(occasionDefinitions) as OccasionType[]).map((key) => {
-                  const def = occasionDefinitions[key];
-                  const isSelected = occasionType === key;
-                  return (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => handleSwitchOccasion(key)}
-                      className={cn(
-                        "flex-1 min-w-[110px] sm:min-w-0 py-2.5 px-3 rounded-xl text-xs font-serif font-semibold transition-all flex items-center justify-center gap-1.5 select-none",
-                        isSelected
-                          ? "bg-[#74182E] text-white shadow-soft ring-2 ring-[#74182E]/20"
-                          : "text-stone-600 hover:text-[#74182E] hover:bg-[#FAF7F2]"
-                      )}
-                    >
-                      <span className="text-sm">{def.emoji}</span>
-                      <span>{def.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* ================= 3-COLUMN SHOWCASE ================= */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* LEFT FEATURE CARDS (3 cols) */}
@@ -598,7 +572,19 @@ function SignupContent() {
                             isActive ? "text-[#74182E] font-bold" : "text-stone-400"
                           )}
                         >
-                          {s.title}
+                          {s.id === 1
+                            ? occasionType === "wedding"
+                              ? "Couple"
+                              : occasionType === "birthday"
+                              ? "Birthday Star"
+                              : "Hosts"
+                            : s.id === 2
+                            ? occasionType === "wedding"
+                              ? "Wedding"
+                              : occasionType === "birthday"
+                              ? "Party"
+                              : "Venue"
+                            : "Personalize"}
                         </span>
                       </button>
                     );
@@ -608,7 +594,12 @@ function SignupContent() {
                 {/* Form Heading */}
                 <div className="text-center pt-1">
                   <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#2D1B28]">
-                    {currentStep === 1 && (occasionType === "birthday" ? "Tell us about the birthday star" : "Tell us about the hosts")}
+                    {currentStep === 1 &&
+                      (occasionType === "wedding"
+                        ? "Tell us about the couple"
+                        : occasionType === "birthday"
+                        ? "Tell us about the birthday star"
+                        : "Tell us about the hosts")}
                     {currentStep === 2 && `${currentDef.label} Date & Venue`}
                     {currentStep === 3 && `Personalize your ${currentDef.label.toLowerCase()}`}
                   </h3>
@@ -849,11 +840,11 @@ function SignupContent() {
 
               {/* RIGHT LIVE INVITATION CARD (4 cols) */}
               <div className="lg:col-span-4 relative flex flex-col items-center">
-                {/* Live Preview Badge with Occasion Type */}
+                {/* Live Preview Badge */}
                 <div className="mb-2">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#74182E] text-white text-[10px] font-semibold tracking-wider shadow-sm uppercase">
                     <Eye className="w-3 h-3" />
-                    <span>Live {currentDef.label} Preview</span>
+                    <span>Live Preview</span>
                   </span>
                 </div>
 
