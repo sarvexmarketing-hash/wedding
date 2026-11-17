@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Logo } from "@/components/brand/Logo";
+import { HighlightText } from "@/components/ui/highlight-text";
 import { useWedding } from "@/context/WeddingContext";
 import { Wedding } from "@/lib/types";
 import {
@@ -63,7 +64,16 @@ export default function SignupPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-xl text-center space-y-3">
         <Logo size="lg" className="justify-center" />
         <h2 className="text-3xl font-serif font-bold text-[#2D1B28]">
-          {createdWedding ? "Wedding Workspace Initialized!" : "Create Your Wedding in 2 Minutes"}
+          {createdWedding ? (
+            "Wedding Workspace Initialized!"
+          ) : (
+            <HighlightText
+              text="Create Your Wedding in 2 Minutes"
+              delay={0.2}
+              duration={0.85}
+              highlightClassName="bg-gradient-to-r from-[#C5A059]/30 via-[#74182E]/15 to-[#C5A059]/35 rounded-lg px-2"
+            />
+          )}
         </h2>
         <p className="text-xs text-[#7D597E]">
           {createdWedding
