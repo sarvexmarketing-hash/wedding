@@ -117,7 +117,7 @@ export default function SignupPage() {
   const [formData, setFormData] = useState({
     brideName: "Priya",
     groomName: "Rahul",
-    hashtag: "#PriyaWedsRahul",
+    weddingTitle: "The Sharma & Verma Wedding",
     email: "couple@domain.com",
     weddingDate: "24 May 2026",
     ceremonyTime: "5:00 PM Onwards",
@@ -393,15 +393,15 @@ export default function SignupPage() {
 
                     <div>
                       <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                        Wedding Hashtag (Optional)
+                        Title (Surname Wedding)
                       </label>
                       <div className="relative">
-                        <Hash className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                        <Sparkles className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#C5A059]" />
                         <input
                           type="text"
-                          placeholder="e.g. #RahulWedsPriya"
-                          value={formData.hashtag}
-                          onChange={(e) => updateField("hashtag", e.target.value)}
+                          placeholder="e.g. The Sharma & Verma Wedding"
+                          value={formData.weddingTitle}
+                          onChange={(e) => updateField("weddingTitle", e.target.value)}
                           className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
                         />
                       </div>
@@ -787,11 +787,11 @@ export default function SignupPage() {
                           <p className="text-[#C5A059] font-mono text-[9px]">{formData.ceremonyTime}</p>
                         </div>
 
-                        {/* Hashtag */}
-                        {formData.hashtag && (
+                        {/* Title (Surname Wedding) */}
+                        {formData.weddingTitle && (
                           <div className="pt-2">
-                            <span className="text-[9px] font-mono text-[#74182E] bg-[#74182E]/5 px-2 py-0.5 rounded-full border border-[#74182E]/10">
-                              {formData.hashtag}
+                            <span className="text-[10px] font-serif font-bold text-[#74182E] bg-[#74182E]/5 px-3 py-1 rounded-full border border-[#74182E]/15 tracking-wide">
+                              ✦ {formData.weddingTitle} ✦
                             </span>
                           </div>
                         )}
