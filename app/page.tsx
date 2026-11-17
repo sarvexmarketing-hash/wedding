@@ -43,14 +43,27 @@ export default function HomePage() {
   const [occasionModalOpen, setOccasionModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#2D1B28] selection:bg-[#74182E] selection:text-white">
+    <div 
+      className="min-h-screen flex flex-col text-[#2D1B28] selection:bg-[#74182E] selection:text-white bg-[#FAF7F2] relative"
+      style={{
+        backgroundImage: "url('/occasions-bg.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}
+    >
       <Navbar />
 
       {/* 1. HERO SECTION WITH KINETIC TYPOGRAPHY */}
-      <section className="relative pt-16 pb-24 md:pt-28 md:pb-36 overflow-hidden min-h-[85vh] flex flex-col justify-center">
-        {/* Subtle radial luxury vignette & warm ambiance */}
-        <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#FAF7F2]/60 to-[#FAF7F2] pointer-events-none -z-5" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-[#74182E]/5 via-[#C5A059]/10 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+      <section className="relative pt-16 pb-24 md:pt-28 md:pb-36 overflow-hidden min-h-[85vh] flex flex-col justify-center bg-transparent">
+        {/* Crisp watercolor floral background overlay for Hero */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center sm:bg-top bg-no-repeat pointer-events-none -z-10"
+          style={{ backgroundImage: "url('/occasions-bg.jpg')" }}
+        />
+        {/* Soft elegant warm ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-[#74182E]/5 via-[#C5A059]/10 to-transparent rounded-full blur-3xl pointer-events-none -z-5" />
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-7">
           {/* Eyebrow */}
