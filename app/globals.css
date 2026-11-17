@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FAF7F2;
+    --foreground: #2D1B28;
+    --card: #FFFFFF;
+    --card-foreground: #2D1B28;
+    --primary: #74182E;
+    --primary-foreground: #FFFFFF;
+    --secondary: #F3ECE1;
+    --secondary-foreground: #2D1B28;
+    --accent: #C5A059;
+    --accent-foreground: #1A1017;
+    --muted: #EFE8DD;
+    --muted-foreground: #7D597E;
+    --border: #E8DDCF;
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-playfair), "Cormorant Garamond", Georgia, serif;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF7F2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D5C3AE;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}
+
+/* Glassmorphism & Luxury gradients */
+.bg-ivory-gradient {
+  background: linear-gradient(180deg, #FCFBF9 0%, #FAF7F2 100%);
+}
+
+.bg-burgundy-gradient {
+  background: linear-gradient(135deg, #74182E 0%, #4A0E1C 100%);
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #D4AF37 0%, #AA8232 100%);
+}
+
+.bg-silk-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(232, 221, 207, 0.7);
+}
+
+.gold-border-glow {
+  box-shadow: 0 0 0 1px rgba(197, 160, 89, 0.3), 0 4px 20px -2px rgba(116, 24, 46, 0.08);
+}
+
+/* Card Fan Carousel Styles */
+.fan-layout {
+  position: relative;
+  width: 100%;
+  height: 22rem;
+}
+@media (min-width: 480px) {
+  .fan-layout {
+    height: 26rem;
+  }
+}
+@media (min-width: 640px) {
+  .fan-layout {
+    height: 28rem;
+  }
+}
+@media (min-width: 768px) {
+  .fan-layout {
+    height: 34rem;
+  }
+}
+@media (min-width: 1024px) {
+  .fan-layout {
+    height: 38rem;
+  }
+}
+
+.fan-card {
+  position: absolute;
+  width: 13rem;
+  height: 18rem;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 16px 36px -8px rgba(45, 27, 40, 0.2), 0 0 0 1px rgba(197, 160, 89, 0.25);
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+  cursor: pointer;
+  background-color: #FAF7F2;
+}
+@media (min-width: 480px) {
+  .fan-card {
+    width: 15rem;
+    height: 21rem;
+    border-radius: 1.5rem;
+  }
+}
+@media (min-width: 640px) {
+  .fan-card {
+    width: 17rem;
+    height: 23rem;
+  }
+}
+@media (min-width: 768px) {
+  .fan-card {
+    width: 19rem;
+    height: 26rem;
+    border-radius: 1.75rem;
+  }
+}
+@media (min-width: 1024px) {
+  .fan-card {
+    width: 22rem;
+    height: 30rem;
+    border-radius: 2rem;
+  }
+}
