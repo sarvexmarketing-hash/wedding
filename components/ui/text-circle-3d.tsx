@@ -233,29 +233,29 @@ export default function TextCircle3D({
 
     const meshes: THREE.Mesh[] = [];
     const numWords = words.length;
-    const innerRadius = 0.95; // Radius of central circle empty space
+    const innerRadius = 1.08; // Radius of central circle empty space
 
     words.forEach((word, index) => {
-      // Create high-res 2D Canvas for crisp typography
+      // Create high-res 2D Canvas for crisp large typography
       const textCanvas = document.createElement('canvas');
       const ctx = textCanvas.getContext('2d');
       if (!ctx) return;
 
-      const fontSize = 56;
-      textCanvas.width = 720;
-      textCanvas.height = 140;
+      const fontSize = 84;
+      textCanvas.width = 960;
+      textCanvas.height = 180;
 
       ctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
       // Serif luxury font matching Codrops Neuton style with wide letter spacing
-      ctx.font = `700 ${fontSize}px "Cinzel", "Playfair Display", "Cormorant Garamond", "Georgia", serif`;
+      ctx.font = `800 ${fontSize}px "Cinzel", "Playfair Display", "Cormorant Garamond", "Georgia", serif`;
       ctx.textBaseline = 'middle';
       ctx.textAlign = 'left';
 
       if ('letterSpacing' in ctx) {
-        ctx.letterSpacing = '5px';
+        ctx.letterSpacing = '6px';
       }
 
       // Color scheme: Highlight special emotional anchors
@@ -268,7 +268,7 @@ export default function TextCircle3D({
         index % 5 === 0;
 
       ctx.fillStyle = isHighlighted ? '#74182E' : '#231B20';
-      ctx.fillText(word, 16, textCanvas.height / 2);
+      ctx.fillText(word, 20, textCanvas.height / 2);
 
       // Create texture
       const texture = new THREE.CanvasTexture(textCanvas);
@@ -277,9 +277,9 @@ export default function TextCircle3D({
       texture.generateMipmaps = false;
 
       // Plane geometry with horizontal subdivisions for smooth rubber warping!
-      const planeWidth = 1.6;
+      const planeWidth = 2.45;
       const planeHeight = planeWidth * (textCanvas.height / textCanvas.width);
-      const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 36, 1);
+      const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 48, 1);
 
       // Translate geometry so origin is at the inner edge (circle radius)
       geometry.translate(innerRadius + planeWidth / 2, 0, 0);
@@ -469,7 +469,7 @@ export default function TextCircle3D({
       {/* Main 3D Canvas Container */}
       <div
         ref={containerRef}
-        className="relative w-full h-[620px] md:h-[720px] cursor-grab active:cursor-grabbing select-none flex items-center justify-center"
+        className="relative w-full h-[700px] md:h-[820px] cursor-grab active:cursor-grabbing select-none flex items-center justify-center"
       >
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
 
