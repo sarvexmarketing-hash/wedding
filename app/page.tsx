@@ -82,25 +82,25 @@ export default function HomePage() {
           </div>
 
           {/* Magnetic CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 pt-6">
             <MagneticButton strength={0.3}>
               <button
                 type="button"
                 onClick={() => setOccasionModalOpen(true)}
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="inline-flex items-center justify-center gap-3 px-10 py-4.5 sm:px-12 sm:py-5 rounded-full bg-[#74182E] text-white text-lg sm:text-xl font-serif font-bold shadow-soft-xl hover:bg-[#581223] hover:shadow-2xl transition-all transform hover:-translate-y-1 active:translate-y-0 cursor-pointer border border-[#8C2534]"
               >
                 <span>Create Your Occasion Free</span>
-                <ArrowRight className="w-5 h-5 text-[#E1CD98]" />
+                <ArrowRight className="w-6 h-6 text-[#E1CD98]" />
               </button>
             </MagneticButton>
 
             <MagneticButton strength={0.2}>
               <button
                 onClick={() => setDemoModalOpen(true)}
-                className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-full bg-white/90 backdrop-blur-md text-[#2D1B28] text-base font-semibold border border-[#E8DDCF] shadow-soft hover:bg-white hover:border-[#C5A059] transition-all"
+                className="inline-flex items-center justify-center gap-3 px-9 py-4.5 sm:px-11 sm:py-5 rounded-full bg-white text-[#2D1B28] text-lg sm:text-xl font-serif font-semibold border-2 border-[#E8DDCF] shadow-soft hover:bg-[#FAF7F2] hover:border-[#C5A059] transition-all transform hover:-translate-y-1 cursor-pointer"
               >
-                <div className="w-7 h-7 rounded-full bg-[#74182E]/10 flex items-center justify-center text-[#74182E]">
-                  <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                <div className="w-8 h-8 rounded-full bg-[#74182E]/10 flex items-center justify-center text-[#74182E] flex-none">
+                  <Play className="w-4 h-4 fill-current ml-0.5" />
                 </div>
                 <span>Watch 2-min Demo</span>
               </button>
@@ -190,21 +190,21 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 pt-4">
             <MagneticButton strength={0.3}>
               <button
                 type="button"
                 onClick={() => setOccasionModalOpen(true)}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                className="inline-flex items-center justify-center gap-3 px-10 py-4.5 sm:px-12 sm:py-5 rounded-full bg-[#74182E] text-white text-lg sm:text-xl font-serif font-bold shadow-soft-xl hover:bg-[#581223] hover:shadow-2xl transition-all transform hover:-translate-y-1 cursor-pointer border border-[#8C2534]"
               >
                 <span>Create Your Occasion Free</span>
-                <ArrowRight className="w-5 h-5 text-[#E1CD98]" />
+                <ArrowRight className="w-6 h-6 text-[#E1CD98]" />
               </button>
             </MagneticButton>
 
             <Link
               href="/pricing"
-              className="px-6 py-4 rounded-full bg-white text-[#2D1B28] text-base font-semibold border border-[#E8DDCF] hover:bg-[#FAF7F2] transition-colors"
+              className="px-8 py-4.5 sm:px-10 sm:py-5 rounded-full bg-white text-[#2D1B28] text-lg sm:text-xl font-serif font-semibold border-2 border-[#E8DDCF] hover:bg-[#FAF7F2] hover:border-[#C5A059] transition-all transform hover:-translate-y-1 shadow-soft"
             >
               View Transparent Pricing
             </Link>
