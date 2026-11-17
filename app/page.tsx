@@ -17,6 +17,7 @@ import { AnimatedCounters } from "@/components/ui/animated-counter";
 import { DestinationCloud } from "@/components/ui/destination-cloud";
 import { EditorialManifesto } from "@/components/marketing/EditorialManifesto";
 import { OccasionPickerModal } from "@/components/marketing/OccasionPickerModal";
+import SpecularButton from "@/components/ui/SpecularButton";
 import {
   ArrowRight,
   Play,
@@ -84,14 +85,28 @@ export default function HomePage() {
           {/* Magnetic CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 pt-6">
             <MagneticButton strength={0.3}>
-              <button
-                type="button"
+              <SpecularButton
+                size="lg"
+                radius={999}
+                tint="#74182E"
+                tintOpacity={1}
+                textColor="#ffffff"
+                lineColor="#E1CD98"
+                baseColor="#8C2534"
+                intensity={1.2}
+                idleIntensity={0.35}
+                shineSize={14}
+                shineFade={36}
+                thickness={1.5}
+                glow={1.2}
+                followMouse
+                proximity={260}
                 onClick={() => setOccasionModalOpen(true)}
-                className="inline-flex items-center justify-center gap-3 px-10 py-4.5 sm:px-12 sm:py-5 rounded-full bg-[#74182E] text-white text-lg sm:text-xl font-serif font-bold shadow-soft-xl hover:bg-[#581223] hover:shadow-2xl transition-all transform hover:-translate-y-1 active:translate-y-0 cursor-pointer border border-[#8C2534]"
+                className="!px-10 !py-4.5 sm:!px-12 sm:!py-5 font-serif font-bold text-lg sm:text-xl shadow-soft-xl hover:shadow-2xl transition-all border border-[#8C2534] cursor-pointer"
               >
                 <span>Create Your Occasion Free</span>
                 <ArrowRight className="w-6 h-6 text-[#E1CD98]" />
-              </button>
+              </SpecularButton>
             </MagneticButton>
 
             <MagneticButton strength={0.2}>
@@ -192,14 +207,28 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 pt-4">
             <MagneticButton strength={0.3}>
-              <button
-                type="button"
+              <SpecularButton
+                size="lg"
+                radius={999}
+                tint="#74182E"
+                tintOpacity={1}
+                textColor="#ffffff"
+                lineColor="#E1CD98"
+                baseColor="#8C2534"
+                intensity={1.2}
+                idleIntensity={0.35}
+                shineSize={14}
+                shineFade={36}
+                thickness={1.5}
+                glow={1.2}
+                followMouse
+                proximity={260}
                 onClick={() => setOccasionModalOpen(true)}
-                className="inline-flex items-center justify-center gap-3 px-10 py-4.5 sm:px-12 sm:py-5 rounded-full bg-[#74182E] text-white text-lg sm:text-xl font-serif font-bold shadow-soft-xl hover:bg-[#581223] hover:shadow-2xl transition-all transform hover:-translate-y-1 cursor-pointer border border-[#8C2534]"
+                className="!px-10 !py-4.5 sm:!px-12 sm:!py-5 font-serif font-bold text-lg sm:text-xl shadow-soft-xl hover:shadow-2xl transition-all border border-[#8C2534] cursor-pointer"
               >
                 <span>Create Your Occasion Free</span>
                 <ArrowRight className="w-6 h-6 text-[#E1CD98]" />
-              </button>
+              </SpecularButton>
             </MagneticButton>
 
             <Link
