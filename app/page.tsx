@@ -82,7 +82,7 @@ export default function HomePage() {
               <KineticTextRotator
                 phrases={[
                   "orchestrated.",
-                  "elevated to royalty.",
+                  "your occasion, our celebration.",
                   "run like a system.",
                   "celebrated without chaos."
                 ]}
