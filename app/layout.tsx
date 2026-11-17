@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { WeddingProvider } from "@/context/WeddingContext";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "WeddingOS — The Wedding Guest Operating System",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[#FAF7F2] text-[#2D1B28] font-sans antialiased selection:bg-[#74182E] selection:text-white">
         <WeddingProvider>
           {children}
+          <Toaster position="top-right" richColors />
         </WeddingProvider>
       </body>
     </html>
