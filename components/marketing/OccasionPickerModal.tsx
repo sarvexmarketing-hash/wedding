@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles, ArrowRight } from "lucide-react";
@@ -45,34 +46,52 @@ interface OccasionPickerModalProps {
 }
 
 export function OccasionPickerModal({ isOpen, onClose }: OccasionPickerModalProps) {
-  if (!isOpen) return null;
+  const [mounted, setMounted] = useState(false);
 
-  return (
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  if (!isOpen || !mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto">
-        {/* Backdrop */}
+      <div className="fixed inset-0 z-[9999] overflow-y-auto">
+        {/* Full Viewport Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/65 backdrop-blur-sm transition-opacity"
+          className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity"
         />
 
         {/* Modal Centering Wrapper */}
-        <div className="flex min-h-full items-center justify-center p-4 text-center">
+        <div className="flex min-h-screen items-center justify-center p-4 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="relative w-full max-w-lg bg-[#FAF7F2] rounded-3xl border-2 border-[#C5A059] shadow-2xl p-6 sm:p-7 z-10 text-left my-auto"
+            className="relative w-full max-w-md bg-[#FAF7F2] rounded-3xl border-2 border-[#C5A059] shadow-2xl p-6 sm:p-7 text-left my-auto"
           >
             {/* Close button */}
             <button
               type="button"
               onClick={onClose}
-              className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-white border border-[#E8DDCF] flex items-center justify-center text-stone-500 hover:text-stone-900 hover:border-stone-400 transition-all shadow-xs cursor-pointer"
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-white border border-[#E8DDCF] flex items-center justify-center text-stone-500 hover:text-stone-900 hover:border-stone-400 transition-all shadow-xs cursor-pointer z-20"
               aria-label="Close modal"
             >
               <X className="w-4 h-4" />
@@ -89,33 +108,34 @@ export function OccasionPickerModal({ isOpen, onClose }: OccasionPickerModalProp
               </h2>
             </div>
 
-            {/* Occasion Cards - Clean Headings Only */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-5">
+            {/* Occasion Cards - Clean Headings & Icons Only */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-4">
               {occasionOptions.map((opt, idx) => (
                 <Link
                   key={opt.id}
                   href={`/signup?type=${opt.id}`}
                   onClick={onClose}
-                  className={`p-4 rounded-2xl border border-[#E8DDCF] bg-white hover:border-[#74182E] hover:bg-[#FDF2F4]/40 hover:shadow-md transition-all flex items-center justify-between group ${
-                    idx === 4 ? "sm:col-span-2 sm:max-w-[240px] sm:mx-auto sm:w-full" : ""
+                  className={`p-3.5 rounded-2xl border border-[#E8DDCF] bg-white hover:border-[#74182E] hover:bg-[#FDF2F4]/50 hover:shadow-md transition-all flex items-center justify-between group cursor-pointer ${
+                    idx === 4 ? "sm:col-span-2 sm:max-w-[200px] sm:mx-auto sm:w-full" : ""
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl group-hover:scale-110 transition-transform">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xl group-hover:scale-110 transition-transform">
                       {opt.emoji}
                     </span>
-                    <h3 className="text-base font-serif font-bold text-[#2D1B28] group-hover:text-[#74182E] transition-colors">
+                    <h3 className="text-sm font-serif font-bold text-[#2D1B28] group-hover:text-[#74182E] transition-colors">
                       {opt.title}
                     </h3>
                   </div>
 
-                  <ArrowRight className="w-4 h-4 text-stone-400 group-hover:text-[#74182E] group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-[#74182E] group-hover:translate-x-0.5 transition-all" />
                 </Link>
               ))}
             </div>
           </motion.div>
         </div>
       </div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

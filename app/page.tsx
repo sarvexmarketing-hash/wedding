@@ -6,7 +6,6 @@ import { Navbar } from "@/components/marketing/Navbar";
 import { Footer } from "@/components/marketing/Footer";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { KineticTextRotator } from "@/components/ui/kinetic-text";
-import TechText from "@/components/ui/TechText";
 import { BeforeAfterCollapse } from "@/components/ui/before-after-collapse";
 import { ScrollStorytelling } from "@/components/ui/scroll-storytelling";
 import TextCircle3D from "@/components/ui/text-circle-3d";
@@ -59,28 +58,13 @@ export default function HomePage() {
             <span>The Occasion Operating System</span>
           </div>
 
-          {/* Main Headline with TechText for "Weddings," */}
+          {/* Main Headline */}
           <div className="space-y-1">
-            <div className="w-full h-20 sm:h-28 md:h-36 max-w-3xl mx-auto relative flex items-center justify-center">
-              <TechText
-                text="Occasions,"
-                fontFamily="Playfair Display, Cormorant Garamond, Georgia, serif"
-                fontWeight={700}
-                fontSize={96}
-                color="#2D1B28"
-                accentColor="#C5A059"
-                reveal="letter"
-                dashLength={4}
-                dashGap={2}
-                specks={14}
-                intro="none"
-                clickKick
-                draggable
-                guides={false}
-              />
-            </div>
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-serif font-bold text-[#2D1B28] tracking-tight leading-none drop-shadow-xs">
+              Occasions,
+            </h1>
 
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-[#74182E] tracking-tight leading-[1.1]">
+            <div className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-[#74182E] tracking-tight leading-[1.1] pt-1">
               <KineticTextRotator
                 phrases={[
                   "orchestrated.",
@@ -90,7 +74,7 @@ export default function HomePage() {
                 ]}
                 className="text-[#74182E]"
               />
-            </h1>
+            </div>
 
             <p className="text-sm sm:text-lg text-[#654566] max-w-2xl mx-auto font-sans leading-relaxed pt-3">
               Invitations · Guest CRM · Real-Time RSVPs · Multi-Day Itineraries · Catering Intelligence · Palace Check-In
