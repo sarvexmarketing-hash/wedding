@@ -63,15 +63,15 @@ export default function SignupPage() {
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-xl text-center space-y-3">
         <Logo size="lg" className="justify-center" />
-        <h2 className="text-3xl font-serif font-bold text-[#2D1B28]">
+        <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#2D1B28]">
           {createdWedding ? (
             "Wedding Workspace Initialized!"
           ) : (
             <HighlightText
               text="Create Your Wedding in 2 Minutes"
               delay={0.2}
-              duration={0.85}
-              highlightClassName="bg-gradient-to-r from-[#C5A059]/30 via-[#74182E]/15 to-[#C5A059]/35 rounded-lg px-2"
+              className="rounded-lg bg-gradient-to-r from-[#C5A059]/30 via-[#74182E]/15 to-[#C5A059]/35 px-2 py-0.5 text-[#2D1B28]"
+              inView
             />
           )}
         </h2>
