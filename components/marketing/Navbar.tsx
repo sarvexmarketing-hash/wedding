@@ -5,11 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/brand/Logo";
 import { GooeyNav } from "@/components/ui/GooeyNav";
+import { OccasionPickerModal } from "@/components/marketing/OccasionPickerModal";
 import { ChevronDown, Menu, X, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [occasionPickerOpen, setOccasionPickerOpen] = useState(false);
   const pathname = usePathname();
 
   const navItems = [
@@ -76,13 +78,14 @@ export function Navbar() {
             >
               Log in
             </Link>
-            <Link
-              href="/signup"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#74182E] text-white text-sm font-medium shadow-soft hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+            <button
+              type="button"
+              onClick={() => setOccasionPickerOpen(true)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#74182E] text-white text-sm font-medium shadow-soft hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
             >
               <span>Create Your Occasion</span>
               <ArrowRight className="w-4 h-4 text-[#E1CD98]" />
-            </Link>
+            </button>
           </div>
 
           {/* Mobile hamburger */}
@@ -191,16 +194,25 @@ export function Navbar() {
             >
               Log in
             </Link>
-            <Link
-              href="/signup"
-              onClick={() => setMobileMenuOpen(false)}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setOccasionPickerOpen(true);
+              }}
               className="w-full text-center py-2.5 rounded-full bg-[#74182E] text-white text-sm font-medium"
             >
               Create Your Occasion Free
-            </Link>
+            </button>
           </div>
         </div>
       )}
+
+      {/* Occasion Picker Modal */}
+      <OccasionPickerModal
+        isOpen={occasionPickerOpen}
+        onClose={() => setOccasionPickerOpen(false)}
+      />
     </header>
   );
 }

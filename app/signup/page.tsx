@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Logo } from "@/components/brand/Logo";
 import { useWedding } from "@/context/WeddingContext";
 import { Wedding } from "@/lib/types";
@@ -24,40 +23,240 @@ import {
   Loader2,
   ExternalLink,
   CheckCircle2,
-  Eye
+  Eye,
+  Cake,
+  Wine,
+  Heart,
+  Baby
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-// 3-Step Process exactly as shown in screenshot
+export type OccasionType = "wedding" | "birthday" | "anniversary" | "engagement" | "babyshower";
+
+interface OccasionDef {
+  id: OccasionType;
+  label: string;
+  emoji: string;
+  badge: string;
+  headline: string;
+  previewHeader: string;
+  defaultPerson1: string;
+  defaultPerson2?: string;
+  defaultMilestone?: string;
+  defaultDate: string;
+  defaultCity: string;
+  defaultVenue: string;
+  defaultTitle: string;
+  fields: {
+    person1Label: string;
+    person1Placeholder: string;
+    person2Label?: string;
+    person2Placeholder?: string;
+    milestoneLabel?: string;
+    milestonePlaceholder?: string;
+    titleLabel: string;
+    titlePlaceholder: string;
+    ceremoniesLabel: string;
+  };
+  ceremonies: string[];
+}
+
+const occasionDefinitions: Record<OccasionType, OccasionDef> = {
+  wedding: {
+    id: "wedding",
+    label: "Wedding",
+    emoji: "💍",
+    badge: "WEDDING SETUP",
+    headline: "Let's Begin Your Wedding Story",
+    previewHeader: "THE WEDDING OF",
+    defaultPerson1: "Priya",
+    defaultPerson2: "Rahul",
+    defaultDate: "12 December 2026",
+    defaultCity: "Hyderabad",
+    defaultVenue: "The Grand Palace",
+    defaultTitle: "The Sharma & Verma Wedding",
+    fields: {
+      person1Label: "Bride's Name *",
+      person1Placeholder: "Priya",
+      person2Label: "Groom's Name *",
+      person2Placeholder: "Rahul",
+      titleLabel: "Title (Surname Wedding)",
+      titlePlaceholder: "e.g. The Sharma & Verma Wedding",
+      ceremoniesLabel: "Select Sacred Ceremonies:"
+    },
+    ceremonies: ["Mehendi", "Haldi", "Sangeet", "Wedding Ceremony", "Reception"]
+  },
+  birthday: {
+    id: "birthday",
+    label: "Birthday",
+    emoji: "🎂",
+    badge: "BIRTHDAY SETUP",
+    headline: "Let's Plan Your Birthday Celebration",
+    previewHeader: "CELEBRATING THE BIRTHDAY OF",
+    defaultPerson1: "Aarav",
+    defaultMilestone: "Turning 1 Year Old",
+    defaultDate: "18 January 2027",
+    defaultCity: "Mumbai",
+    defaultVenue: "The Taj Ballroom",
+    defaultTitle: "Aarav's Safari Carnival Bash",
+    fields: {
+      person1Label: "Birthday Star's Name *",
+      person1Placeholder: "Aarav",
+      milestoneLabel: "Milestone / Age *",
+      milestonePlaceholder: "e.g. 1st Birthday, 18th, 30th, 50th Jubilee",
+      titleLabel: "Party Theme / Headline",
+      titlePlaceholder: "e.g. Aarav's Safari Carnival, Neon Glow Night",
+      ceremoniesLabel: "Select Party Segments:"
+    },
+    ceremonies: [
+      "Welcome Mocktails & Bites",
+      "Cake Cutting Ceremony",
+      "Magic Show & Kids Games",
+      "DJ & Dance Floor",
+      "Gourmet Dinner Buffet"
+    ]
+  },
+  anniversary: {
+    id: "anniversary",
+    label: "Anniversary",
+    emoji: "🥂",
+    badge: "ANNIVERSARY SETUP",
+    headline: "Let's Celebrate Your Milestone Anniversary",
+    previewHeader: "CELEBRATING 25 YEARS OF LOVE",
+    defaultPerson1: "Rajesh",
+    defaultPerson2: "Sunita",
+    defaultMilestone: "25th Silver Jubilee",
+    defaultDate: "24 February 2027",
+    defaultCity: "Udaipur",
+    defaultVenue: "The Oberoi Udaivilas",
+    defaultTitle: "Rajesh & Sunita's Silver Jubilee Gala",
+    fields: {
+      person1Label: "Partner 1 Name *",
+      person1Placeholder: "Rajesh",
+      person2Label: "Partner 2 Name *",
+      person2Placeholder: "Sunita",
+      milestoneLabel: "Milestone Year *",
+      milestonePlaceholder: "e.g. 25th Silver Jubilee, 50th Golden",
+      titleLabel: "Celebration Title",
+      titlePlaceholder: "e.g. 25 Years of Eternal Togetherness",
+      ceremoniesLabel: "Select Celebration Events:"
+    },
+    ceremonies: [
+      "Welcome Cocktail Reception",
+      "Vow Renewal Ceremony",
+      "Family Photo Retrospective",
+      "Champagne Toast & Cake",
+      "Royal Gala Dinner"
+    ]
+  },
+  engagement: {
+    id: "engagement",
+    label: "Engagement",
+    emoji: "✨",
+    badge: "ENGAGEMENT SETUP",
+    headline: "Let's Announce Your Engagement",
+    previewHeader: "THE ENGAGEMENT OF",
+    defaultPerson1: "Simran",
+    defaultPerson2: "Kabir",
+    defaultDate: "15 March 2027",
+    defaultCity: "New Delhi",
+    defaultVenue: "The Roseate, New Delhi",
+    defaultTitle: "The Ring Ceremony of Simran & Kabir",
+    fields: {
+      person1Label: "Bride-to-be Name *",
+      person1Placeholder: "Simran",
+      person2Label: "Groom-to-be Name *",
+      person2Placeholder: "Kabir",
+      titleLabel: "Celebration Title",
+      titlePlaceholder: "e.g. Ring Ceremony & Sangeet Night",
+      ceremoniesLabel: "Select Ceremonies:"
+    },
+    ceremonies: [
+      "Traditional Puja / Blessing",
+      "Ring Exchange Ceremony",
+      "Sangeet & Cocktails",
+      "Family Dinner Celebration"
+    ]
+  },
+  babyshower: {
+    id: "babyshower",
+    label: "Baby Shower",
+    emoji: "🍼",
+    badge: "BABY SHOWER SETUP",
+    headline: "Let's Celebrate A New Blessing",
+    previewHeader: "A LITTLE BLESSING IS ON THE WAY",
+    defaultPerson1: "Neha",
+    defaultPerson2: "Aditya",
+    defaultDate: "20 April 2027",
+    defaultCity: "Bengaluru",
+    defaultVenue: "ITC Gardenia, Bengaluru",
+    defaultTitle: "Neha's Godh Bharai Celebration",
+    fields: {
+      person1Label: "Mother-to-be Name *",
+      person1Placeholder: "Neha",
+      person2Label: "Partner / Father-to-be (Optional)",
+      person2Placeholder: "Aditya",
+      titleLabel: "Ceremony Title",
+      titlePlaceholder: "e.g. Neha's Sreemantham Blessing",
+      ceremoniesLabel: "Select Ceremonies:"
+    },
+    ceremonies: [
+      "Traditional Blessing & Aarti",
+      "Family Songs & Haldi Ritual",
+      "Baby Trivia & Games",
+      "Festive Traditional Feast"
+    ]
+  }
+};
+
 const steps = [
-  { id: 1, title: "Couple" },
-  { id: 2, title: "Wedding" },
+  { id: 1, title: "Hosts" },
+  { id: 2, title: "Date & Venue" },
   { id: 3, title: "Personalize" },
 ];
 
-export default function SignupPage() {
+function SignupContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { createNewWedding, allWeddings, switchWedding, setCurrentRole } = useWedding();
+
+  // Query parameter support: ?type=birthday | wedding | anniversary | engagement | babyshower
+  const rawType = searchParams.get("type")?.toLowerCase() as OccasionType;
+  const initialType: OccasionType = occasionDefinitions[rawType] ? rawType : "wedding";
+
+  const [occasionType, setOccasionType] = useState<OccasionType>(initialType);
+  const currentDef = occasionDefinitions[occasionType];
 
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdWedding, setCreatedWedding] = useState<Wedding | null>(null);
 
-  // Form Fields matching screenshot
-  const [brideName, setBrideName] = useState("Priya");
-  const [groomName, setGroomName] = useState("Rahul");
-  const [email, setEmail] = useState("couple@example.com");
-  const [weddingDate, setWeddingDate] = useState("12 December 2026");
-  const [city, setCity] = useState("Hyderabad");
-  const [primaryVenue, setPrimaryVenue] = useState("The Grand Palace");
-  const [weddingTitle, setWeddingTitle] = useState("The Sharma & Verma Wedding");
-  const [selectedFunctions, setSelectedFunctions] = useState<string[]>([
-    "Mehendi",
-    "Sangeet",
-    "Wedding Ceremony",
-    "Reception"
-  ]);
+  // Form Fields dynamically synced with occasion type
+  const [person1, setPerson1] = useState(currentDef.defaultPerson1);
+  const [person2, setPerson2] = useState(currentDef.defaultPerson2 || "");
+  const [milestone, setMilestone] = useState(currentDef.defaultMilestone || "");
+  const [email, setEmail] = useState("host@example.com");
+  const [eventDate, setEventDate] = useState(currentDef.defaultDate);
+  const [city, setCity] = useState(currentDef.defaultCity);
+  const [primaryVenue, setPrimaryVenue] = useState(currentDef.defaultVenue);
+  const [eventTitle, setEventTitle] = useState(currentDef.defaultTitle);
+  const [selectedFunctions, setSelectedFunctions] = useState<string[]>(currentDef.ceremonies);
+
+  // When switching occasion type, update defaults gracefully
+  const handleSwitchOccasion = (type: OccasionType) => {
+    setOccasionType(type);
+    const def = occasionDefinitions[type];
+    setPerson1(def.defaultPerson1);
+    setPerson2(def.defaultPerson2 || "");
+    setMilestone(def.defaultMilestone || "");
+    setEventDate(def.defaultDate);
+    setCity(def.defaultCity);
+    setPrimaryVenue(def.defaultVenue);
+    setEventTitle(def.defaultTitle);
+    setSelectedFunctions(def.ceremonies);
+    setCurrentStep(1);
+  };
 
   const toggleFunction = (fn: string) => {
     if (selectedFunctions.includes(fn)) {
@@ -80,18 +279,19 @@ export default function SignupPage() {
     setIsSubmitting(true);
 
     setTimeout(() => {
+      const displayCoupleNames = person2 ? `${person2} & ${person1}` : person1;
       const newWed = createNewWedding({
-        brideName: brideName || "Priya",
-        groomName: groomName || "Rahul",
-        weddingDate: weddingDate || "12 December 2026",
+        brideName: person1 || "Priya",
+        groomName: person2 || "Host",
+        weddingDate: eventDate || "12 December 2026",
         city: city || "Hyderabad",
-        primaryVenue: primaryVenue || "The Grand Palace, Hyderabad",
-        email: email || "couple@example.com"
+        primaryVenue: primaryVenue || "The Grand Palace",
+        email: email || "host@example.com"
       });
 
       setCreatedWedding(newWed);
       setIsSubmitting(false);
-      toast.success("Wedding workspace initialized!");
+      toast.success(`${currentDef.label} workspace initialized!`);
     }, 1200);
   };
 
@@ -101,10 +301,12 @@ export default function SignupPage() {
     router.push("/app");
   };
 
+  // Preview names formatting
+  const previewNamesString = person2 ? `${person2} & ${person1}` : person1;
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] text-[#2D1B28] flex flex-col justify-between relative overflow-x-hidden selection:bg-[#74182E] selection:text-white">
       {/* ================= CORNER BOTANICAL FLORAL DECORATIONS ================= */}
-      {/* Top-Left Botanical Floral Branch */}
       <div className="absolute top-0 left-0 w-64 sm:w-80 md:w-96 h-auto pointer-events-none z-0 opacity-90 select-none">
         <svg viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
           <defs>
@@ -130,92 +332,42 @@ export default function SignupPage() {
               <stop offset="0%" stopColor="#A3B496" />
               <stop offset="100%" stopColor="#6E8160" />
             </linearGradient>
-            <linearGradient id="leafGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#C8D4BE" />
-              <stop offset="100%" stopColor="#8D9E80" />
-            </linearGradient>
             <linearGradient id="goldStem" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#E5C778" />
               <stop offset="100%" stopColor="#B38B3A" />
             </linearGradient>
           </defs>
 
-          {/* Stems */}
           <path d="M-20 -20 C50 60 90 140 120 230" stroke="#8A6E53" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
           <path d="M40 30 C100 80 160 130 220 180" stroke="#8A6E53" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-          <path d="M110 130 C160 180 200 240 230 290" stroke="#8A6E53" strokeWidth="1.8" strokeLinecap="round" opacity="0.5" />
-
-          {/* Eucalyptus / Olive Leaves */}
           <path d="M15 35 C40 20 60 40 45 65 C30 75 10 55 15 35 Z" fill="url(#leafGrad1)" opacity="0.8" />
-          <path d="M60 75 C95 55 115 80 95 105 C75 120 50 95 60 75 Z" fill="url(#leafGrad2)" opacity="0.85" />
+          <path d="M60 75 C95 55 115 80 95 105 C75 120 50 95 60 75 Z" fill="#A3B496" opacity="0.85" />
           <path d="M130 115 C165 95 185 120 165 145 C145 160 120 135 130 115 Z" fill="url(#leafGrad1)" opacity="0.8" />
-          <path d="M175 165 C210 145 230 170 210 195 C190 210 165 185 175 165 Z" fill="url(#leafGrad2)" opacity="0.85" />
-          <path d="M210 230 C240 215 255 235 240 255 C225 270 200 250 210 230 Z" fill="url(#leafGrad1)" opacity="0.8" />
 
           {/* Golden accent sprigs */}
           <path d="M25 80 C50 90 55 115 35 125 C20 130 10 105 25 80 Z" fill="url(#goldStem)" opacity="0.75" />
-          <path d="M90 160 C115 170 120 195 100 205 C85 210 75 185 90 160 Z" fill="url(#goldStem)" opacity="0.75" />
-          <circle cx="115" cy="180" r="3.5" fill="#C5A059" opacity="0.8" />
-          <circle cx="170" cy="225" r="3" fill="#C5A059" opacity="0.8" />
-          <circle cx="60" cy="130" r="3" fill="#C5A059" opacity="0.8" />
-
-          {/* Lush Watercolor Roses */}
-          {/* Main Large Rose */}
-          <g transform="translate(85, 90)">
-            <ellipse cx="0" cy="0" rx="38" ry="34" fill="url(#roseGrad1)" />
-            <path d="M-15 -18 C-5 -30 20 -25 25 -10 C30 5 15 25 -5 22 C-20 20 -28 0 -15 -18 Z" fill="url(#roseGrad2)" opacity="0.9" />
-            <path d="M-8 -10 C0 -18 15 -15 18 -5 C20 5 10 15 0 14 C-10 12 -14 0 -8 -10 Z" fill="#9C3041" opacity="0.85" />
-            <path d="M-3 -4 C2 -8 8 -7 10 -2 C11 3 6 8 1 7 C-4 6 -6 0 -3 -4 Z" fill="#6E1624" />
-          </g>
-
-          {/* Medium Peach Rose */}
-          <g transform="translate(160, 155)">
-            <ellipse cx="0" cy="0" rx="28" ry="25" fill="url(#peachGrad)" />
-            <path d="M-10 -12 C-3 -22 15 -18 18 -7 C22 4 11 18 -3 16 C-14 14 -19 0 -10 -12 Z" fill="#E6A382" opacity="0.9" />
-            <path d="M-5 -6 C0 -12 10 -10 12 -3 C14 4 7 10 0 9 C-7 8 -9 0 -5 -6 Z" fill="#BF6E4E" opacity="0.85" />
-          </g>
-
-          {/* Small Blush Rosebud */}
-          <g transform="translate(200, 235)">
-            <ellipse cx="0" cy="0" rx="20" ry="18" fill="url(#roseGrad2)" />
-            <path d="M-6 -8 C0 -14 10 -12 12 -4 C14 4 8 10 0 9 C-7 8 -9 0 -6 -8 Z" fill="#C45A69" opacity="0.9" />
-            <circle cx="2" cy="1" r="5" fill="#8C2534" />
-          </g>
-        </svg>
-      </div>
-
-      {/* Bottom-Right Botanical Floral Branch */}
-      <div className="absolute bottom-0 right-0 w-60 sm:w-76 md:w-92 h-auto pointer-events-none z-0 opacity-90 select-none rotate-180">
-        <svg viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-          {/* Stems */}
-          <path d="M-20 -20 C50 60 90 140 120 230" stroke="#8A6E53" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
-          <path d="M40 30 C100 80 160 130 220 180" stroke="#8A6E53" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-          <path d="M110 130 C160 180 200 240 230 290" stroke="#8A6E53" strokeWidth="1.8" strokeLinecap="round" opacity="0.5" />
-
-          {/* Leaves */}
-          <path d="M15 35 C40 20 60 40 45 65 C30 75 10 55 15 35 Z" fill="#8D9E80" opacity="0.8" />
-          <path d="M60 75 C95 55 115 80 95 105 C75 120 50 95 60 75 Z" fill="#A3B496" opacity="0.85" />
-          <path d="M130 115 C165 95 185 120 165 145 C145 160 120 135 130 115 Z" fill="#8D9E80" opacity="0.8" />
-          <path d="M175 165 C210 145 230 170 210 195 C190 210 165 185 175 165 Z" fill="#A3B496" opacity="0.85" />
-
-          {/* Gold sprigs */}
-          <path d="M25 80 C50 90 55 115 35 125 C20 130 10 105 25 80 Z" fill="#C5A059" opacity="0.75" />
-          <path d="M90 160 C115 170 120 195 100 205 C85 210 75 185 90 160 Z" fill="#C5A059" opacity="0.75" />
           <circle cx="115" cy="180" r="3.5" fill="#C5A059" opacity="0.8" />
 
           {/* Roses */}
           <g transform="translate(85, 90)">
-            <ellipse cx="0" cy="0" rx="36" ry="32" fill="#EAA4AD" />
-            <path d="M-15 -18 C-5 -30 20 -25 25 -10 C30 5 15 25 -5 22 C-20 20 -28 0 -15 -18 Z" fill="#D97A88" opacity="0.9" />
-            <circle cx="2" cy="1" r="10" fill="#8C2534" />
+            <ellipse cx="0" cy="0" rx="38" ry="34" fill="url(#roseGrad1)" />
+            <path d="M-15 -18 C-5 -30 20 -25 25 -10 C30 5 15 25 -5 22 C-20 20 -28 0 -15 -18 Z" fill="url(#roseGrad2)" opacity="0.9" />
+            <circle cx="2" cy="1" r="7" fill="#6E1624" />
           </g>
           <g transform="translate(160, 155)">
-            <ellipse cx="0" cy="0" rx="26" ry="24" fill="#F7CEB6" />
+            <ellipse cx="0" cy="0" rx="28" ry="25" fill="url(#peachGrad)" />
             <circle cx="2" cy="1" r="8" fill="#BF6E4E" />
           </g>
-          <g transform="translate(200, 235)">
-            <ellipse cx="0" cy="0" rx="18" ry="16" fill="#F3BCC3" />
-            <circle cx="1" cy="0" r="5" fill="#9C3041" />
+        </svg>
+      </div>
+
+      <div className="absolute bottom-0 right-0 w-60 sm:w-76 md:w-92 h-auto pointer-events-none z-0 opacity-90 select-none rotate-180">
+        <svg viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+          <path d="M-20 -20 C50 60 90 140 120 230" stroke="#8A6E53" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+          <path d="M15 35 C40 20 60 40 45 65 C30 75 10 55 15 35 Z" fill="#8D9E80" opacity="0.8" />
+          <g transform="translate(85, 90)">
+            <ellipse cx="0" cy="0" rx="36" ry="32" fill="#EAA4AD" />
+            <circle cx="2" cy="1" r="10" fill="#8C2534" />
           </g>
         </svg>
       </div>
@@ -254,7 +406,7 @@ export default function SignupPage() {
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <h2 className="text-3xl font-serif font-bold text-[#2D1B28]">
-              Occasion Workspace Initialized!
+              {currentDef.label} Workspace Initialized!
             </h2>
             <p className="text-xs text-[#7D597E] max-w-sm mx-auto">
               Your royal celebration for <strong className="text-[#74182E]">{createdWedding.coupleNames}</strong> is now live.
@@ -298,17 +450,17 @@ export default function SignupPage() {
             </div>
           </div>
         ) : (
-          <div className="space-y-10">
+          <div className="space-y-8">
             {/* PAGE TITLE & SUBTITLE */}
             <div className="text-center space-y-2 max-w-3xl mx-auto">
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#C5A059]">
-                WEDDINGOS • OCCASION SETUP
+                WEDDINGOS • {currentDef.badge}
               </p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#2D1B28] tracking-tight">
-                Let&apos;s Begin Your Occasion Story
+                {currentDef.headline}
               </h1>
               <p className="text-xs sm:text-sm text-[#7D597E] font-light max-w-xl mx-auto leading-relaxed">
-                Create your occasion workspace, invitations, RSVP system and guest experience — all in one place.
+                Create your {currentDef.label.toLowerCase()} workspace, invitations, RSVP system and guest experience — all in one place.
               </p>
 
               {/* Decorative Floral Ornament */}
@@ -316,6 +468,32 @@ export default function SignupPage() {
                 <span className="w-16 h-px bg-gradient-to-r from-transparent to-[#C5A059]" />
                 <span className="text-sm">✦ ❀ ✦</span>
                 <span className="w-16 h-px bg-gradient-to-l from-transparent to-[#C5A059]" />
+              </div>
+            </div>
+
+            {/* ================= OCCASION TYPE SELECTOR BAR ================= */}
+            <div className="max-w-3xl mx-auto">
+              <div className="p-1.5 rounded-2xl bg-white border border-[#E8DDCF] shadow-soft-sm flex items-center justify-between gap-1 overflow-x-auto">
+                {(Object.keys(occasionDefinitions) as OccasionType[]).map((key) => {
+                  const def = occasionDefinitions[key];
+                  const isSelected = occasionType === key;
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => handleSwitchOccasion(key)}
+                      className={cn(
+                        "flex-1 min-w-[110px] sm:min-w-0 py-2.5 px-3 rounded-xl text-xs font-serif font-semibold transition-all flex items-center justify-center gap-1.5 select-none",
+                        isSelected
+                          ? "bg-[#74182E] text-white shadow-soft ring-2 ring-[#74182E]/20"
+                          : "text-stone-600 hover:text-[#74182E] hover:bg-[#FAF7F2]"
+                      )}
+                    >
+                      <span className="text-sm">{def.emoji}</span>
+                      <span>{def.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -388,7 +566,6 @@ export default function SignupPage() {
               <div className="lg:col-span-5 bg-white rounded-3xl border border-[#E8DDCF] p-6 sm:p-7 shadow-soft-sm space-y-6">
                 {/* 3-Step Stepper Bar */}
                 <div className="relative flex justify-between items-center px-4 pt-1">
-                  {/* Connecting Line */}
                   <div className="absolute top-4 left-10 right-10 h-0.5 bg-[#E8DDCF] -z-0" />
                   <div
                     className="absolute top-4 left-10 h-0.5 bg-[#74182E] transition-all duration-300 -z-0"
@@ -433,63 +610,83 @@ export default function SignupPage() {
                 {/* Form Heading */}
                 <div className="text-center pt-1">
                   <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#2D1B28]">
-                    {currentStep === 1 && "Tell us about the couple"}
-                    {currentStep === 2 && "Occasion Date & Venue"}
-                    {currentStep === 3 && "Personalize your occasion"}
+                    {currentStep === 1 && (occasionType === "birthday" ? "Tell us about the birthday star" : "Tell us about the hosts")}
+                    {currentStep === 2 && `${currentDef.label} Date & Venue`}
+                    {currentStep === 3 && `Personalize your ${currentDef.label.toLowerCase()}`}
                   </h3>
                   <p className="text-xs text-[#7D597E] mt-0.5 font-light">
                     {currentStep === 1 && "Let's start with the most important details."}
                     {currentStep === 2 && "Where and when the celebrations will unfold."}
-                    {currentStep === 3 && "Configure ceremonies and custom details."}
+                    {currentStep === 3 && "Configure event titles, segments, and food hospitality."}
                   </p>
                 </div>
 
-                {/* STEP 1: Couple Names & Email */}
+                {/* STEP 1: Names, Milestone & Email */}
                 {currentStep === 1 && (
                   <div className="space-y-4 pt-1">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className={cn("grid gap-3", currentDef.fields.person2Label || currentDef.fields.milestoneLabel ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1")}>
                       <div>
                         <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                          Bride&apos;s Name *
+                          {currentDef.fields.person1Label}
                         </label>
                         <div className="relative">
                           <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                           <input
                             type="text"
-                            placeholder="Priya"
-                            value={brideName}
-                            onChange={(e) => setBrideName(e.target.value)}
+                            placeholder={currentDef.fields.person1Placeholder}
+                            value={person1}
+                            onChange={(e) => setPerson1(e.target.value)}
                             className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
                           />
                         </div>
                       </div>
 
-                      <div>
-                        <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                          Groom&apos;s Name *
-                        </label>
-                        <div className="relative">
-                          <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
-                          <input
-                            type="text"
-                            placeholder="Rahul"
-                            value={groomName}
-                            onChange={(e) => setGroomName(e.target.value)}
-                            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
-                          />
+                      {currentDef.fields.person2Label && (
+                        <div>
+                          <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                            {currentDef.fields.person2Label}
+                          </label>
+                          <div className="relative">
+                            <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                            <input
+                              type="text"
+                              placeholder={currentDef.fields.person2Placeholder}
+                              value={person2}
+                              onChange={(e) => setPerson2(e.target.value)}
+                              className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
+                            />
+                          </div>
                         </div>
-                      </div>
+                      )}
+
+                      {currentDef.fields.milestoneLabel && (
+                        <div>
+                          <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                            {currentDef.fields.milestoneLabel}
+                          </label>
+                          <div className="relative">
+                            <Sparkles className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#C5A059]" />
+                            <input
+                              type="text"
+                              placeholder={currentDef.fields.milestonePlaceholder}
+                              value={milestone}
+                              onChange={(e) => setMilestone(e.target.value)}
+                              className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
 
                     <div>
                       <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                        Couple / Family Account Email *
+                        Host / Account Email *
                       </label>
                       <div className="relative">
                         <Mail className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                         <input
                           type="email"
-                          placeholder="couple@example.com"
+                          placeholder="host@example.com"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
@@ -499,20 +696,20 @@ export default function SignupPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Wedding Date, Venue & City */}
+                {/* STEP 2: Date, City & Venue */}
                 {currentStep === 2 && (
                   <div className="space-y-4 pt-1">
                     <div>
                       <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                        Occasion Date *
+                        {currentDef.label} Date *
                       </label>
                       <div className="relative">
                         <Calendar className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                         <input
                           type="text"
-                          placeholder="12 December 2026"
-                          value={weddingDate}
-                          onChange={(e) => setWeddingDate(e.target.value)}
+                          placeholder={currentDef.defaultDate}
+                          value={eventDate}
+                          onChange={(e) => setEventDate(e.target.value)}
                           className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
                         />
                       </div>
@@ -527,7 +724,7 @@ export default function SignupPage() {
                           <MapPin className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                           <input
                             type="text"
-                            placeholder="Hyderabad"
+                            placeholder={currentDef.defaultCity}
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
                             className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
@@ -537,13 +734,13 @@ export default function SignupPage() {
 
                       <div>
                         <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                          Palace / Primary Venue *
+                          Celebration Venue *
                         </label>
                         <div className="relative">
                           <Building className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                           <input
                             type="text"
-                            placeholder="The Grand Palace"
+                            placeholder={currentDef.defaultVenue}
                             value={primaryVenue}
                             onChange={(e) => setPrimaryVenue(e.target.value)}
                             className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
@@ -559,15 +756,15 @@ export default function SignupPage() {
                   <div className="space-y-4 pt-1">
                     <div>
                       <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                        Title (Surname Occasion)
+                        {currentDef.fields.titleLabel}
                       </label>
                       <div className="relative">
                         <Sparkles className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#C5A059]" />
                         <input
                           type="text"
-                          placeholder="e.g. The Sharma & Verma Occasion"
-                          value={weddingTitle}
-                          onChange={(e) => setWeddingTitle(e.target.value)}
+                          placeholder={currentDef.fields.titlePlaceholder}
+                          value={eventTitle}
+                          onChange={(e) => setEventTitle(e.target.value)}
                           className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
                         />
                       </div>
@@ -575,10 +772,10 @@ export default function SignupPage() {
 
                     <div>
                       <label className="block text-[11px] font-semibold text-stone-700 mb-1.5">
-                        Select Sacred Ceremonies:
+                        {currentDef.fields.ceremoniesLabel}
                       </label>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        {["Mehendi", "Haldi", "Sangeet", "Wedding Ceremony", "Reception"].map((fn) => {
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        {currentDef.ceremonies.map((fn) => {
                           const isSel = selectedFunctions.includes(fn);
                           return (
                             <div
@@ -634,7 +831,7 @@ export default function SignupPage() {
                       </>
                     ) : (
                       <>
-                        <span>{currentStep === 3 ? "Complete Setup & Launch →" : "Continue →"}</span>
+                        <span>{currentStep === 3 ? `Complete ${currentDef.label} Setup →` : "Continue →"}</span>
                       </>
                     )}
                   </button>
@@ -654,16 +851,16 @@ export default function SignupPage() {
 
               {/* RIGHT LIVE INVITATION CARD (4 cols) */}
               <div className="lg:col-span-4 relative flex flex-col items-center">
-                {/* Live Preview Badge */}
+                {/* Live Preview Badge with Occasion Type */}
                 <div className="mb-2">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#74182E] text-white text-[10px] font-semibold tracking-wider shadow-sm uppercase">
                     <Eye className="w-3 h-3" />
-                    <span>Live Preview</span>
+                    <span>Live {currentDef.label} Preview</span>
                   </span>
                 </div>
 
-                {/* LUXURY ARCH INVITATION CARD */}
-                <div className="w-full max-w-[340px] rounded-[36px] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6EE] to-[#F5EFE3] border border-[#C5A059]/40 p-6 shadow-2xl relative overflow-hidden text-center">
+                {/* LUXURY ARCH INVITATION CARD (Theme-Adaptive) */}
+                <div className="w-full max-w-[340px] rounded-[36px] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6EE] to-[#F5EFE3] border border-[#C5A059]/40 p-6 shadow-2xl relative overflow-hidden text-center transition-all">
                   {/* Subtle Inner Gold Arch Border */}
                   <div className="absolute inset-2.5 rounded-[30px] border border-[#C5A059]/35 pointer-events-none" />
                   <div className="absolute inset-3 rounded-[28px] border border-[#C5A059]/15 pointer-events-none" />
@@ -672,101 +869,165 @@ export default function SignupPage() {
                   <div className="w-full flex justify-center -mt-2 mb-2 select-none pointer-events-none">
                     <svg viewBox="0 0 260 70" className="w-56 h-auto" fill="none">
                       <path d="M15 50 C70 15 190 15 245 50" stroke="#C5A059" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
-                      {/* Leaves */}
                       <path d="M45 30 C35 18 55 12 65 25 Z" fill="#8D9E80" opacity="0.8" />
                       <path d="M75 22 C85 10 95 24 85 30 Z" fill="#A3B496" opacity="0.85" />
                       <path d="M175 22 C165 10 155 24 165 30 Z" fill="#A3B496" opacity="0.85" />
                       <path d="M205 30 C215 18 195 12 185 25 Z" fill="#8D9E80" opacity="0.8" />
-                      {/* Flowers */}
                       <circle cx="130" cy="22" r="10" fill="#EAA4AD" />
                       <circle cx="130" cy="22" r="5" fill="#8C2534" />
                       <circle cx="95" cy="28" r="7" fill="#F7CEB6" />
                       <circle cx="165" cy="28" r="7" fill="#F7CEB6" />
-                      <circle cx="65" cy="38" r="5" fill="#F3BCC3" />
-                      <circle cx="195" cy="38" r="5" fill="#F3BCC3" />
                     </svg>
                   </div>
 
                   {/* Card Content */}
-                  <div className="space-y-2.5 py-1">
+                  <div className="space-y-2 py-1">
                     <p className="text-[10px] font-serif tracking-[0.22em] text-[#C5A059] uppercase font-bold">
-                      THE WEDDING OF
+                      {currentDef.previewHeader}
                     </p>
 
-                    {/* Couple Names in Elegant Great Vibes Calligraphy Script */}
+                    {/* Celebrant / Couple Names in Script */}
                     <div className="py-1">
                       <h3 className="text-3xl sm:text-4xl font-script text-[#74182E] font-normal tracking-wide drop-shadow-xs">
-                        {groomName || "Rahul"} &amp; {brideName || "Priya"}
+                        {previewNamesString}
                       </h3>
                     </div>
 
-                    {/* Floral Separator Motif */}
-                    <div className="text-[11px] text-[#C5A059] opacity-80 select-none">
-                      ✦ ❀ ✦
-                    </div>
+                    {/* Milestone Badge if present */}
+                    {milestone && (
+                      <div className="text-[11px] font-serif italic text-[#C5A059] font-medium">
+                        ✦ {milestone} ✦
+                      </div>
+                    )}
 
                     {/* Date */}
                     <div className="pt-1 flex items-center justify-center gap-1.5 text-xs text-stone-700 font-serif font-semibold">
                       <Calendar className="w-3.5 h-3.5 text-[#C5A059]" />
-                      <span>{weddingDate || "12 December 2026"}</span>
+                      <span>{eventDate}</span>
                     </div>
 
-                    {/* Location */}
+                    {/* Location & Venue */}
                     <div className="flex items-center justify-center gap-1.5 text-[11px] text-stone-500 font-light">
                       <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
-                      <span>{city || "Hyderabad"}</span>
+                      <span>{city}</span>
                     </div>
 
-                    {/* Wedding Title Badge */}
-                    {weddingTitle && (
+                    {/* Celebration Title Badge */}
+                    {eventTitle && (
                       <div className="pt-1">
-                        <span className="text-[10px] font-serif text-[#74182E] bg-[#74182E]/5 px-3 py-1 rounded-full border border-[#74182E]/10 tracking-wide">
-                          {weddingTitle}
+                        <span className="text-[10px] font-serif text-[#74182E] bg-[#74182E]/5 px-3 py-1 rounded-full border border-[#74182E]/10 tracking-wide inline-block max-w-[260px] truncate">
+                          {eventTitle}
                         </span>
                       </div>
                     )}
                   </div>
 
-                  {/* Bottom Golden Heritage Palace Illustration */}
+                  {/* BOTTOM ILLUSTRATION DYNAMICALLY ADAPTED TO OCCASION */}
                   <div className="w-full pt-4 mt-3 border-t border-[#C5A059]/20 flex flex-col items-center select-none pointer-events-none">
-                    <svg viewBox="0 0 280 110" className="w-64 h-auto" fill="none">
-                      {/* Floral clusters flanking the palace */}
-                      <g opacity="0.85">
-                        <circle cx="28" cy="85" r="9" fill="#EAA4AD" />
-                        <circle cx="28" cy="85" r="4" fill="#8C2534" />
-                        <path d="M15 95 C25 80 40 85 30 100 Z" fill="#8D9E80" />
-                        <circle cx="252" cy="85" r="9" fill="#EAA4AD" />
-                        <circle cx="252" cy="85" r="4" fill="#8C2534" />
-                        <path d="M265 95 C255 80 240 85 250 100 Z" fill="#8D9E80" />
-                      </g>
+                    {occasionType === "birthday" ? (
+                      /* BIRTHDAY CELEBRATION ARTWORK (Cake, Balloons, Confetti Stars) */
+                      <svg viewBox="0 0 280 110" className="w-64 h-auto" fill="none">
+                        {/* Balloons */}
+                        <g opacity="0.85">
+                          <circle cx="50" cy="40" r="14" fill="#EAA4AD" />
+                          <path d="M50 54 L50 85" stroke="#C5A059" strokeWidth="1" strokeDasharray="2 2" />
+                          <circle cx="70" cy="30" r="12" fill="#F7CEB6" />
+                          <path d="M70 42 L70 85" stroke="#C5A059" strokeWidth="1" strokeDasharray="2 2" />
+                          <circle cx="230" cy="40" r="14" fill="#EAA4AD" />
+                          <path d="M230 54 L230 85" stroke="#C5A059" strokeWidth="1" strokeDasharray="2 2" />
+                          <circle cx="210" cy="30" r="12" fill="#F7CEB6" />
+                          <path d="M210 42 L210 85" stroke="#C5A059" strokeWidth="1" strokeDasharray="2 2" />
+                        </g>
 
-                      {/* Palace Silhouette & Domes in Antique Gold */}
-                      <g fill="#C5A059" opacity="0.55">
-                        {/* Central Grand Dome */}
-                        <path d="M140 15 C125 15 120 35 120 50 L160 50 C160 35 155 15 140 15 Z" />
-                        <rect x="138" y="5" width="4" height="10" />
-                        <circle cx="140" cy="5" r="3" />
-                        {/* Side Domes */}
-                        <path d="M95 30 C85 30 80 45 80 55 L110 55 C110 45 105 30 95 30 Z" />
-                        <rect x="93.5" y="22" width="3" height="8" />
-                        <path d="M185 30 C175 30 170 45 170 55 L200 55 C200 45 195 30 185 30 Z" />
-                        <rect x="183.5" y="22" width="3" height="8" />
-                        {/* Minarets */}
-                        <rect x="60" y="35" width="8" height="40" />
-                        <path d="M64 22 L58 35 L70 35 Z" />
-                        <rect x="212" y="35" width="8" height="40" />
-                        <path d="M216 22 L210 35 L222 35 Z" />
-                        {/* Palace Base & Arches */}
-                        <rect x="50" y="55" width="180" height="25" rx="2" />
-                        <rect x="30" y="75" width="220" height="15" rx="2" />
-                        {/* Arches Cutouts */}
-                        <path d="M130 75 C130 62 150 62 150 75 Z" fill="#FAF6EE" />
-                        <path d="M105 75 C105 65 120 65 120 75 Z" fill="#FAF6EE" />
-                        <path d="M160 75 C160 65 175 65 175 75 Z" fill="#FAF6EE" />
-                        <path d="M85 75 C85 67 97 67 97 75 Z" fill="#FAF6EE" />
-                        <path d="M183 75 C183 67 195 67 195 75 Z" fill="#FAF6EE" />
-                      </g>
-                    </svg>
+                        {/* Birthday Tiered Cake in Antique Gold & Burgundy */}
+                        <g fill="#C5A059" opacity="0.65">
+                          {/* Candle & Flame */}
+                          <path d="M140 12 C138 18 142 22 140 26 C138 22 142 18 140 12 Z" fill="#E26D5C" opacity="0.9" />
+                          <rect x="139" y="26" width="2" height="12" fill="#C5A059" />
+
+                          {/* Top Tier */}
+                          <rect x="120" y="38" width="40" height="20" rx="3" />
+                          {/* Middle Tier */}
+                          <rect x="105" y="58" width="70" height="22" rx="4" />
+                          {/* Bottom Tier & Stand */}
+                          <rect x="90" y="80" width="100" height="14" rx="4" />
+                          <rect x="75" y="94" width="130" height="5" rx="2" />
+                        </g>
+                        {/* Confetti stars */}
+                        <circle cx="95" cy="25" r="2" fill="#C5A059" />
+                        <circle cx="185" cy="25" r="2" fill="#C5A059" />
+                        <circle cx="140" cy="98" r="3" fill="#8C2534" />
+                      </svg>
+                    ) : occasionType === "anniversary" ? (
+                      /* ANNIVERSARY ARTWORK (Twin Interlocking Rings & Champagne Flutes) */
+                      <svg viewBox="0 0 280 110" className="w-64 h-auto" fill="none">
+                        <g opacity="0.75" stroke="#C5A059" strokeWidth="3">
+                          {/* Twin Rings */}
+                          <circle cx="125" cy="55" r="24" fill="none" />
+                          <circle cx="155" cy="55" r="24" fill="none" />
+                        </g>
+                        {/* Diamond on Ring */}
+                        <path d="M125 24 L120 31 L125 38 L130 31 Z" fill="#C5A059" />
+                        {/* Flutes */}
+                        <g opacity="0.55" stroke="#8C2534" strokeWidth="1.5">
+                          <path d="M55 40 L65 70 L65 95 M55 95 L75 95" fill="none" />
+                          <path d="M225 40 L215 70 L215 95 M205 95 L225 95" fill="none" />
+                        </g>
+                        {/* Laurel branches */}
+                        <path d="M80 85 C100 65 110 50 120 40" stroke="#8D9E80" strokeWidth="1.5" />
+                        <path d="M200 85 C180 65 170 50 160 40" stroke="#8D9E80" strokeWidth="1.5" />
+                      </svg>
+                    ) : occasionType === "engagement" ? (
+                      /* ENGAGEMENT ARTWORK (Solitaire Diamond Ring with Laurel) */
+                      <svg viewBox="0 0 280 110" className="w-64 h-auto" fill="none">
+                        <circle cx="140" cy="62" r="26" stroke="#C5A059" strokeWidth="3.5" fill="none" opacity="0.8" />
+                        {/* Diamond Gemstone */}
+                        <path d="M140 22 L130 34 L140 42 L150 34 Z" fill="#D4AF37" opacity="0.9" />
+                        {/* Flanking Floral Sprigs */}
+                        <path d="M70 75 C100 60 115 50 125 42" stroke="#8D9E80" strokeWidth="2" strokeLinecap="round" opacity="0.75" />
+                        <path d="M210 75 C180 60 165 50 155 42" stroke="#8D9E80" strokeWidth="2" strokeLinecap="round" opacity="0.75" />
+                        <circle cx="95" cy="65" r="4" fill="#EAA4AD" />
+                        <circle cx="185" cy="65" r="4" fill="#EAA4AD" />
+                      </svg>
+                    ) : occasionType === "babyshower" ? (
+                      /* BABY SHOWER ARTWORK (Crescent Moon, Stars, Hanging Blessing) */
+                      <svg viewBox="0 0 280 110" className="w-64 h-auto" fill="none">
+                        {/* Crescent Moon */}
+                        <path d="M140 20 C155 20 165 35 165 55 C165 75 150 88 135 88 C145 80 150 68 150 55 C150 40 145 28 140 20 Z" fill="#C5A059" opacity="0.65" />
+                        {/* Cradle base */}
+                        <path d="M100 85 C120 100 160 100 180 85" stroke="#C5A059" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.8" />
+                        {/* Stars */}
+                        <circle cx="110" cy="40" r="3" fill="#C5A059" opacity="0.8" />
+                        <circle cx="175" cy="35" r="3" fill="#C5A059" opacity="0.8" />
+                        <circle cx="90" cy="65" r="2.5" fill="#EAA4AD" opacity="0.9" />
+                        <circle cx="190" cy="65" r="2.5" fill="#EAA4AD" opacity="0.9" />
+                      </svg>
+                    ) : (
+                      /* WEDDING PALACE ARTWORK (Grand Domes, Minarets, Floral Flanks) */
+                      <svg viewBox="0 0 280 110" className="w-64 h-auto" fill="none">
+                        <g opacity="0.85">
+                          <circle cx="28" cy="85" r="9" fill="#EAA4AD" />
+                          <circle cx="28" cy="85" r="4" fill="#8C2534" />
+                          <circle cx="252" cy="85" r="9" fill="#EAA4AD" />
+                          <circle cx="252" cy="85" r="4" fill="#8C2534" />
+                        </g>
+
+                        <g fill="#C5A059" opacity="0.55">
+                          <path d="M140 15 C125 15 120 35 120 50 L160 50 C160 35 155 15 140 15 Z" />
+                          <rect x="138" y="5" width="4" height="10" />
+                          <circle cx="140" cy="5" r="3" />
+                          <path d="M95 30 C85 30 80 45 80 55 L110 55 C110 45 105 30 95 30 Z" />
+                          <path d="M185 30 C175 30 170 45 170 55 L200 55 C200 45 195 30 185 30 Z" />
+                          <rect x="60" y="35" width="8" height="40" />
+                          <rect x="212" y="35" width="8" height="40" />
+                          <rect x="50" y="55" width="180" height="25" rx="2" />
+                          <rect x="30" y="75" width="220" height="15" rx="2" />
+                          <path d="M130 75 C130 62 150 62 150 75 Z" fill="#FAF6EE" />
+                          <path d="M105 75 C105 65 120 65 120 75 Z" fill="#FAF6EE" />
+                          <path d="M160 75 C160 65 175 65 175 75 Z" fill="#FAF6EE" />
+                        </g>
+                      </svg>
+                    )}
                   </div>
                 </div>
               </div>
@@ -785,7 +1046,6 @@ export default function SignupPage() {
 
               {/* Workspace Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto pt-2">
-                {/* Card 1: Ratna & Vag */}
                 <div className="p-4 rounded-2xl bg-white border border-[#E8DDCF] shadow-xs flex items-center justify-between gap-4 hover:border-[#74182E]/30 transition-all">
                   <div className="flex items-center gap-3.5">
                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-stone-100 flex-none relative border border-[#E8DDCF]">
@@ -797,7 +1057,7 @@ export default function SignupPage() {
                     </div>
                     <div className="space-y-0.5">
                       <h4 className="text-sm font-serif font-bold text-[#2D1B28]">
-                        Ratna &amp; Vag
+                        Ratna &amp; Vag (Wedding)
                       </h4>
                       <div className="flex items-center gap-2 text-[11px] text-stone-500">
                         <span className="flex items-center gap-1">
@@ -820,7 +1080,6 @@ export default function SignupPage() {
                   </div>
                 </div>
 
-                {/* Card 2: Rahul & Priya */}
                 <div className="p-4 rounded-2xl bg-white border border-[#E8DDCF] shadow-xs flex items-center justify-between gap-4 hover:border-[#74182E]/30 transition-all">
                   <div className="flex items-center gap-3.5">
                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-stone-100 flex-none relative border border-[#E8DDCF]">
@@ -832,7 +1091,7 @@ export default function SignupPage() {
                     </div>
                     <div className="space-y-0.5">
                       <h4 className="text-sm font-serif font-bold text-[#2D1B28]">
-                        Rahul &amp; Priya
+                        Rahul &amp; Priya (Wedding)
                       </h4>
                       <div className="flex items-center gap-2 text-[11px] text-stone-500">
                         <span className="flex items-center gap-1">
@@ -873,5 +1132,19 @@ export default function SignupPage() {
         WeddingOS • Luxury Digital Stationery &amp; Guest Operations Platform
       </footer>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center text-[#74182E]">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+      }
+    >
+      <SignupContent />
+    </Suspense>
   );
 }

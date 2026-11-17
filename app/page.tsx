@@ -17,6 +17,7 @@ import { HorizontalTemplateGallery } from "@/components/ui/horizontal-template-g
 import { AnimatedCounters } from "@/components/ui/animated-counter";
 import { DestinationCloud } from "@/components/ui/destination-cloud";
 import { EditorialManifesto } from "@/components/marketing/EditorialManifesto";
+import { OccasionPickerModal } from "@/components/marketing/OccasionPickerModal";
 import {
   ArrowRight,
   Play,
@@ -39,6 +40,7 @@ import {
 
 export default function HomePage() {
   const [demoModalOpen, setDemoModalOpen] = useState(false);
+  const [occasionModalOpen, setOccasionModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#2D1B28] selection:bg-[#74182E] selection:text-white">
@@ -98,13 +100,14 @@ export default function HomePage() {
           {/* Magnetic CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
             <MagneticButton strength={0.3}>
-              <Link
-                href="/signup"
-                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+              <button
+                type="button"
+                onClick={() => setOccasionModalOpen(true)}
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 <span>Create Your Occasion Free</span>
                 <ArrowRight className="w-5 h-5 text-[#E1CD98]" />
-              </Link>
+              </button>
             </MagneticButton>
 
             <MagneticButton strength={0.2}>
@@ -205,13 +208,14 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <MagneticButton strength={0.3}>
-              <Link
-                href="/signup"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5"
+              <button
+                type="button"
+                onClick={() => setOccasionModalOpen(true)}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <span>Create Your Occasion Free</span>
                 <ArrowRight className="w-5 h-5 text-[#E1CD98]" />
-              </Link>
+              </button>
             </MagneticButton>
 
             <Link
@@ -274,6 +278,12 @@ export default function HomePage() {
           </div>
         </div>
       )}
+
+      {/* CHOOSE OCCASION MODAL (Birthday, Wedding, Anniversary, etc.) */}
+      <OccasionPickerModal
+        isOpen={occasionModalOpen}
+        onClose={() => setOccasionModalOpen(false)}
+      />
     </div>
   );
 }
