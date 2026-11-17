@@ -2,11 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "@/components/brand/Logo";
-import { HighlightText } from "@/components/ui/highlight-text";
 import { useWedding } from "@/context/WeddingContext";
 import { Wedding } from "@/lib/types";
 import {
@@ -14,93 +12,28 @@ import {
   Calendar,
   MapPin,
   Building,
-  Heart,
-  Upload,
-  Lock,
+  Mail,
   Check,
   ChevronLeft,
-  ChevronRight,
-  Smartphone,
-  Laptop,
   Sparkles,
-  Music,
+  Send,
+  Users,
   Utensils,
-  CheckCircle2,
-  ExternalLink,
-  LogIn,
+  BarChart3,
+  Bell,
   Loader2,
-  Hash,
-  Share2,
-  Palette
+  ExternalLink,
+  CheckCircle2,
+  Eye
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-// 5-Step Process matching user's design
+// 3-Step Process exactly as shown in screenshot
 const steps = [
-  { id: 1, title: "Couple Details" },
-  { id: 2, title: "Wedding Details" },
-  { id: 3, title: "Family Details" },
-  { id: 4, title: "Functions" },
-  { id: 5, title: "Preferences" },
-];
-
-const themes = [
-  {
-    id: "royal-elegance",
-    name: "Royal Elegance",
-    bg: "bg-[#FDFBF7]",
-    cardBg: "from-[#FFFDF9] to-[#F7F2E7]",
-    accent: "#C5A059",
-    primary: "#74182E",
-    textColor: "text-[#2D1B28]",
-    previewBg: "bg-[#F5EFE6]",
-    tag: "Palace Gold"
-  },
-  {
-    id: "vedic-heritage",
-    name: "Vedic Heritage",
-    bg: "bg-[#FFF9F5]",
-    cardBg: "from-[#FFF4ED] to-[#FBE4D8]",
-    accent: "#D97706",
-    primary: "#991B1B",
-    textColor: "text-[#451A03]",
-    previewBg: "bg-[#FEE2E2]",
-    tag: "Crimson & Sindoor"
-  },
-  {
-    id: "blush-floral",
-    name: "Floral Blush",
-    bg: "bg-[#FFF8FA]",
-    cardBg: "from-[#FFF0F5] to-[#FCE7F3]",
-    accent: "#DB2777",
-    primary: "#831843",
-    textColor: "text-[#500724]",
-    previewBg: "bg-[#FCE7F3]",
-    tag: "Pastel Rose"
-  },
-  {
-    id: "midnight-palace",
-    name: "Midnight Palace",
-    bg: "bg-[#16121E]",
-    cardBg: "from-[#1E172B] to-[#120D1D]",
-    accent: "#E1CD98",
-    primary: "#C5A059",
-    textColor: "text-[#F8F5EE]",
-    previewBg: "bg-[#1E172B]",
-    tag: "Royal Obsidian"
-  },
-  {
-    id: "minimal-editorial",
-    name: "Editorial Serif",
-    bg: "bg-[#FAFAF9]",
-    cardBg: "from-white to-[#F5F5F4]",
-    accent: "#78716C",
-    primary: "#1C1917",
-    textColor: "text-[#1C1917]",
-    previewBg: "bg-[#E7E5E4]",
-    tag: "Vogue Luxury"
-  }
+  { id: 1, title: "Couple" },
+  { id: 2, title: "Wedding" },
+  { id: 3, title: "Personalize" },
 ];
 
 export default function SignupPage() {
@@ -110,44 +43,32 @@ export default function SignupPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdWedding, setCreatedWedding] = useState<Wedding | null>(null);
-  const [deviceMode, setDeviceMode] = useState<"mobile" | "desktop">("mobile");
-  const [selectedTheme, setSelectedTheme] = useState(themes[0]);
 
-  // Form Fields
-  const [formData, setFormData] = useState({
-    brideName: "Priya",
-    groomName: "Rahul",
-    weddingTitle: "The Sharma & Verma Wedding",
-    email: "couple@domain.com",
-    weddingDate: "24 May 2026",
-    ceremonyTime: "5:00 PM Onwards",
-    city: "Hyderabad",
-    primaryVenue: "The Grand Palace",
-    brideParents: "D/o Smt. Sunita & Shri Rajesh Sharma",
-    groomParents: "S/o Smt. Anita & Shri Suresh Verma",
-    elderBlessing: "With the divine blessings of our beloved elders",
-    functions: ["Mehendi & Sangeet", "Haldi Ceremony", "Wedding Pheras", "Grand Reception"],
-    musicTheme: "Classical Shehnai & Sitar",
-    dietaryType: "Multi-Cuisine Royal Feast (Jain & Veg Counters)"
-  });
+  // Form Fields matching screenshot
+  const [brideName, setBrideName] = useState("Priya");
+  const [groomName, setGroomName] = useState("Rahul");
+  const [email, setEmail] = useState("couple@example.com");
+  const [weddingDate, setWeddingDate] = useState("12 December 2026");
+  const [city, setCity] = useState("Hyderabad");
+  const [primaryVenue, setPrimaryVenue] = useState("The Grand Palace");
+  const [weddingTitle, setWeddingTitle] = useState("The Sharma & Verma Wedding");
+  const [selectedFunctions, setSelectedFunctions] = useState<string[]>([
+    "Mehendi",
+    "Sangeet",
+    "Wedding Ceremony",
+    "Reception"
+  ]);
 
-  const updateField = (field: string, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const toggleFunction = (fnName: string) => {
-    setFormData((prev) => {
-      const list = [...prev.functions];
-      if (list.includes(fnName)) {
-        return { ...prev, functions: list.filter((f) => f !== fnName) };
-      } else {
-        return { ...prev, functions: [...list, fnName] };
-      }
-    });
+  const toggleFunction = (fn: string) => {
+    if (selectedFunctions.includes(fn)) {
+      setSelectedFunctions(selectedFunctions.filter((f) => f !== fn));
+    } else {
+      setSelectedFunctions([...selectedFunctions, fn]);
+    }
   };
 
   const nextStep = () => {
-    if (currentStep < 5) setCurrentStep((prev) => prev + 1);
+    if (currentStep < 3) setCurrentStep((prev) => prev + 1);
   };
 
   const prevStep = () => {
@@ -160,12 +81,12 @@ export default function SignupPage() {
 
     setTimeout(() => {
       const newWed = createNewWedding({
-        brideName: formData.brideName || "Priya",
-        groomName: formData.groomName || "Rahul",
-        weddingDate: formData.weddingDate || "24 May 2026",
-        city: formData.city || "Hyderabad",
-        primaryVenue: formData.primaryVenue || "The Grand Palace, Hyderabad",
-        email: formData.email || "couple@domain.com"
+        brideName: brideName || "Priya",
+        groomName: groomName || "Rahul",
+        weddingDate: weddingDate || "12 December 2026",
+        city: city || "Hyderabad",
+        primaryVenue: primaryVenue || "The Grand Palace, Hyderabad",
+        email: email || "couple@example.com"
       });
 
       setCreatedWedding(newWed);
@@ -181,151 +102,325 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#2D1B28] flex flex-col justify-between selection:bg-[#74182E] selection:text-white">
-      {/* Top Navbar */}
-      <header className="w-full border-b border-[#E8DDCF]/80 bg-[#FAF7F2]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-30">
-        <Link href="/" className="flex items-center gap-2">
-          <Logo size="md" />
-        </Link>
-        <div className="flex items-center gap-4 text-xs font-serif">
-          <span className="text-stone-500 hidden sm:inline">Your love story • Our design</span>
+    <div className="min-h-screen bg-[#FAF7F2] text-[#2D1B28] flex flex-col justify-between relative overflow-x-hidden selection:bg-[#74182E] selection:text-white">
+      {/* ================= CORNER BOTANICAL FLORAL DECORATIONS ================= */}
+      {/* Top-Left Botanical Floral Branch */}
+      <div className="absolute top-0 left-0 w-64 sm:w-80 md:w-96 h-auto pointer-events-none z-0 opacity-90 select-none">
+        <svg viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+          <defs>
+            <radialGradient id="roseGrad1" cx="40%" cy="40%" r="60%">
+              <stop offset="0%" stopColor="#F9D7DC" />
+              <stop offset="45%" stopColor="#EAA4AD" />
+              <stop offset="85%" stopColor="#C45A69" />
+              <stop offset="100%" stopColor="#8C2534" />
+            </radialGradient>
+            <radialGradient id="roseGrad2" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stopColor="#FCEDEE" />
+              <stop offset="50%" stopColor="#F3BCC3" />
+              <stop offset="85%" stopColor="#D97A88" />
+              <stop offset="100%" stopColor="#9C3041" />
+            </radialGradient>
+            <radialGradient id="peachGrad" cx="30%" cy="30%" r="70%">
+              <stop offset="0%" stopColor="#FFF2E8" />
+              <stop offset="40%" stopColor="#F7CEB6" />
+              <stop offset="80%" stopColor="#E6A382" />
+              <stop offset="100%" stopColor="#BF6E4E" />
+            </radialGradient>
+            <linearGradient id="leafGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#A3B496" />
+              <stop offset="100%" stopColor="#6E8160" />
+            </linearGradient>
+            <linearGradient id="leafGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#C8D4BE" />
+              <stop offset="100%" stopColor="#8D9E80" />
+            </linearGradient>
+            <linearGradient id="goldStem" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#E5C778" />
+              <stop offset="100%" stopColor="#B38B3A" />
+            </linearGradient>
+          </defs>
+
+          {/* Stems */}
+          <path d="M-20 -20 C50 60 90 140 120 230" stroke="#8A6E53" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+          <path d="M40 30 C100 80 160 130 220 180" stroke="#8A6E53" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+          <path d="M110 130 C160 180 200 240 230 290" stroke="#8A6E53" strokeWidth="1.8" strokeLinecap="round" opacity="0.5" />
+
+          {/* Eucalyptus / Olive Leaves */}
+          <path d="M15 35 C40 20 60 40 45 65 C30 75 10 55 15 35 Z" fill="url(#leafGrad1)" opacity="0.8" />
+          <path d="M60 75 C95 55 115 80 95 105 C75 120 50 95 60 75 Z" fill="url(#leafGrad2)" opacity="0.85" />
+          <path d="M130 115 C165 95 185 120 165 145 C145 160 120 135 130 115 Z" fill="url(#leafGrad1)" opacity="0.8" />
+          <path d="M175 165 C210 145 230 170 210 195 C190 210 165 185 175 165 Z" fill="url(#leafGrad2)" opacity="0.85" />
+          <path d="M210 230 C240 215 255 235 240 255 C225 270 200 250 210 230 Z" fill="url(#leafGrad1)" opacity="0.8" />
+
+          {/* Golden accent sprigs */}
+          <path d="M25 80 C50 90 55 115 35 125 C20 130 10 105 25 80 Z" fill="url(#goldStem)" opacity="0.75" />
+          <path d="M90 160 C115 170 120 195 100 205 C85 210 75 185 90 160 Z" fill="url(#goldStem)" opacity="0.75" />
+          <circle cx="115" cy="180" r="3.5" fill="#C5A059" opacity="0.8" />
+          <circle cx="170" cy="225" r="3" fill="#C5A059" opacity="0.8" />
+          <circle cx="60" cy="130" r="3" fill="#C5A059" opacity="0.8" />
+
+          {/* Lush Watercolor Roses */}
+          {/* Main Large Rose */}
+          <g transform="translate(85, 90)">
+            <ellipse cx="0" cy="0" rx="38" ry="34" fill="url(#roseGrad1)" />
+            <path d="M-15 -18 C-5 -30 20 -25 25 -10 C30 5 15 25 -5 22 C-20 20 -28 0 -15 -18 Z" fill="url(#roseGrad2)" opacity="0.9" />
+            <path d="M-8 -10 C0 -18 15 -15 18 -5 C20 5 10 15 0 14 C-10 12 -14 0 -8 -10 Z" fill="#9C3041" opacity="0.85" />
+            <path d="M-3 -4 C2 -8 8 -7 10 -2 C11 3 6 8 1 7 C-4 6 -6 0 -3 -4 Z" fill="#6E1624" />
+          </g>
+
+          {/* Medium Peach Rose */}
+          <g transform="translate(160, 155)">
+            <ellipse cx="0" cy="0" rx="28" ry="25" fill="url(#peachGrad)" />
+            <path d="M-10 -12 C-3 -22 15 -18 18 -7 C22 4 11 18 -3 16 C-14 14 -19 0 -10 -12 Z" fill="#E6A382" opacity="0.9" />
+            <path d="M-5 -6 C0 -12 10 -10 12 -3 C14 4 7 10 0 9 C-7 8 -9 0 -5 -6 Z" fill="#BF6E4E" opacity="0.85" />
+          </g>
+
+          {/* Small Blush Rosebud */}
+          <g transform="translate(200, 235)">
+            <ellipse cx="0" cy="0" rx="20" ry="18" fill="url(#roseGrad2)" />
+            <path d="M-6 -8 C0 -14 10 -12 12 -4 C14 4 8 10 0 9 C-7 8 -9 0 -6 -8 Z" fill="#C45A69" opacity="0.9" />
+            <circle cx="2" cy="1" r="5" fill="#8C2534" />
+          </g>
+        </svg>
+      </div>
+
+      {/* Bottom-Right Botanical Floral Branch */}
+      <div className="absolute bottom-0 right-0 w-60 sm:w-76 md:w-92 h-auto pointer-events-none z-0 opacity-90 select-none rotate-180">
+        <svg viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+          {/* Stems */}
+          <path d="M-20 -20 C50 60 90 140 120 230" stroke="#8A6E53" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+          <path d="M40 30 C100 80 160 130 220 180" stroke="#8A6E53" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+          <path d="M110 130 C160 180 200 240 230 290" stroke="#8A6E53" strokeWidth="1.8" strokeLinecap="round" opacity="0.5" />
+
+          {/* Leaves */}
+          <path d="M15 35 C40 20 60 40 45 65 C30 75 10 55 15 35 Z" fill="#8D9E80" opacity="0.8" />
+          <path d="M60 75 C95 55 115 80 95 105 C75 120 50 95 60 75 Z" fill="#A3B496" opacity="0.85" />
+          <path d="M130 115 C165 95 185 120 165 145 C145 160 120 135 130 115 Z" fill="#8D9E80" opacity="0.8" />
+          <path d="M175 165 C210 145 230 170 210 195 C190 210 165 185 175 165 Z" fill="#A3B496" opacity="0.85" />
+
+          {/* Gold sprigs */}
+          <path d="M25 80 C50 90 55 115 35 125 C20 130 10 105 25 80 Z" fill="#C5A059" opacity="0.75" />
+          <path d="M90 160 C115 170 120 195 100 205 C85 210 75 185 90 160 Z" fill="#C5A059" opacity="0.75" />
+          <circle cx="115" cy="180" r="3.5" fill="#C5A059" opacity="0.8" />
+
+          {/* Roses */}
+          <g transform="translate(85, 90)">
+            <ellipse cx="0" cy="0" rx="36" ry="32" fill="#EAA4AD" />
+            <path d="M-15 -18 C-5 -30 20 -25 25 -10 C30 5 15 25 -5 22 C-20 20 -28 0 -15 -18 Z" fill="#D97A88" opacity="0.9" />
+            <circle cx="2" cy="1" r="10" fill="#8C2534" />
+          </g>
+          <g transform="translate(160, 155)">
+            <ellipse cx="0" cy="0" rx="26" ry="24" fill="#F7CEB6" />
+            <circle cx="2" cy="1" r="8" fill="#BF6E4E" />
+          </g>
+          <g transform="translate(200, 235)">
+            <ellipse cx="0" cy="0" rx="18" ry="16" fill="#F3BCC3" />
+            <circle cx="1" cy="0" r="5" fill="#9C3041" />
+          </g>
+        </svg>
+      </div>
+
+      {/* ================= TOP NAVBAR ================= */}
+      <header className="w-full border-b border-[#E8DDCF]/80 bg-[#FAF7F2]/90 backdrop-blur-md px-6 lg:px-12 py-3.5 flex items-center justify-between sticky top-0 z-30">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-2">
+            <Logo size="md" />
+          </Link>
+          <nav className="hidden md:flex items-center gap-7 text-xs font-serif font-medium text-stone-600">
+            <Link href="/features" className="hover:text-[#74182E] transition-colors">Features</Link>
+            <Link href="/features/invitations" className="hover:text-[#74182E] transition-colors">Templates</Link>
+            <Link href="/pricing" className="hover:text-[#74182E] transition-colors">Pricing</Link>
+            <Link href="/contact" className="hover:text-[#74182E] transition-colors">Support</Link>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-3 text-xs">
+          <span className="text-stone-500 font-serif hidden sm:inline">Already have a workspace?</span>
           <Link
             href="/login"
-            className="px-4 py-2 rounded-full border border-[#C5A059]/40 hover:border-[#74182E] text-[#2D1B28] transition-colors"
+            className="px-4 py-1.5 rounded-full bg-[#74182E] text-white font-serif font-semibold text-xs hover:bg-[#581223] transition-colors shadow-xs"
           >
             Log in
           </Link>
         </div>
       </header>
 
-      {/* Main Split Layout */}
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      {/* ================= MAIN CONTAINER ================= */}
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-10 relative z-10">
         {createdWedding ? (
           /* SUCCESS SCREEN */
-          <div className="max-w-2xl mx-auto bg-white py-10 px-8 rounded-3xl border-2 border-[#C5A059] shadow-soft-xl space-y-6 animate-fade-in">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E8DDCF]">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Wedding Successfully Created
-              </span>
-              <span className="text-xs font-mono text-stone-500">{createdWedding.id}</span>
+          <div className="max-w-xl mx-auto bg-white py-10 px-8 rounded-3xl border-2 border-[#C5A059] shadow-soft-xl space-y-6 animate-fade-in text-center">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center mx-auto text-emerald-600">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
+            <h2 className="text-3xl font-serif font-bold text-[#2D1B28]">
+              Wedding Workspace Initialized!
+            </h2>
+            <p className="text-xs text-[#7D597E] max-w-sm mx-auto">
+              Your royal celebration for <strong className="text-[#74182E]">{createdWedding.coupleNames}</strong> is now live.
+            </p>
 
-            <div className="p-6 rounded-2xl bg-gradient-to-r from-[#FAF7F2] via-white to-[#F3ECE1] border border-[#C5A059] space-y-3">
-              <div className="flex items-center gap-2">
-                <Heart className="w-4 h-4 text-[#74182E] fill-current" />
-                <span className="text-xs uppercase font-bold text-[#74182E] tracking-wider">
-                  New Wedding Workspace
-                </span>
+            <div className="p-5 rounded-2xl bg-[#FAF7F2] border border-[#E8DDCF] space-y-2 text-left text-xs">
+              <div className="flex justify-between text-stone-500">
+                <span>Date:</span> <span className="font-semibold text-stone-800">{createdWedding.weddingDate}</span>
               </div>
-              <h3 className="text-3xl font-serif font-bold text-[#2D1B28]">
-                {createdWedding.coupleNames}
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#4D334E] pt-1">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-[#C5A059]" />
-                  <span>{createdWedding.weddingDate}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-[#C5A059]" />
-                  <span>{createdWedding.city}</span>
-                </div>
-                <div className="sm:col-span-2 flex items-center gap-1.5 text-stone-600">
-                  <Building className="w-4 h-4 text-[#C5A059]" />
-                  <span className="truncate">{createdWedding.primaryVenue}</span>
-                </div>
+              <div className="flex justify-between text-stone-500">
+                <span>Location:</span> <span className="font-semibold text-stone-800">{createdWedding.city}</span>
               </div>
-
-              <div className="pt-3 border-t border-[#E8DDCF] flex items-center justify-between text-xs">
-                <span className="text-[#7D597E] text-[11px]">Guest RSVP Link:</span>
+              <div className="flex justify-between text-stone-500">
+                <span>Venue:</span> <span className="font-semibold text-stone-800">{createdWedding.primaryVenue}</span>
+              </div>
+              <div className="flex justify-between text-stone-500 pt-2 border-t border-[#E8DDCF]">
+                <span>Guest Invite URL:</span>
                 <Link
                   href={`/invite/${createdWedding.slug}`}
                   target="_blank"
-                  className="font-mono text-[#74182E] text-[11px] underline flex items-center gap-1"
+                  className="font-mono text-[#74182E] underline flex items-center gap-1 font-semibold"
                 >
                   /invite/{createdWedding.slug} <ExternalLink className="w-3 h-3" />
                 </Link>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div className="grid grid-cols-2 gap-3 pt-2">
               <button
                 onClick={() => handleSelectAndLogin(createdWedding.id)}
-                className="w-full py-3.5 px-4 rounded-full bg-[#74182E] text-white text-xs font-bold hover:bg-[#581223] transition-colors shadow-soft flex items-center justify-center gap-2"
+                className="py-3 px-4 rounded-full bg-[#74182E] text-white text-xs font-bold hover:bg-[#581223] transition-colors shadow-soft"
               >
-                <LogIn className="w-4 h-4 text-[#E1CD98]" />
-                <span>Log in to Workspace →</span>
+                Launch Workspace →
               </button>
-
               <Link
                 href="/login"
-                className="w-full py-3.5 px-4 rounded-full bg-[#FAF7F2] text-[#2D1B28] text-xs font-semibold border border-[#E8DDCF] hover:bg-stone-100 transition-colors flex items-center justify-center gap-2"
+                className="py-3 px-4 rounded-full bg-white border border-[#E8DDCF] text-stone-700 text-xs font-semibold hover:bg-stone-50 transition-colors flex items-center justify-center"
               >
-                <span>View on Login Screen</span>
+                Login Screen
               </Link>
             </div>
           </div>
         ) : (
-          /* SPLIT-SCREEN ONBOARDING WORKSPACE */
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            {/* LEFT COLUMN: MULTI-STEP FORM */}
-            <div className="lg:col-span-7 space-y-6">
-              {/* Header */}
-              <div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#C5A059] mb-1">
-                  <span>CREATE YOUR WEDDING INVITATION</span>
-                  <Heart className="w-3.5 h-3.5 fill-[#C5A059]" />
-                </div>
-                <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#2D1B28] leading-tight">
-                  <HighlightText
-                    text="Let's make it special"
-                    delay={0.15}
-                    className="rounded-lg bg-gradient-to-r from-[#C5A059]/30 via-[#74182E]/15 to-[#C5A059]/35 px-2 py-0.5"
-                    inView
-                  />
-                </h1>
-                <p className="text-xs sm:text-sm text-[#7D597E] mt-2 font-light">
-                  Share a few details about your big day. We&apos;ll create a beautiful, personalized invitation just for you.
-                </p>
+          <div className="space-y-10">
+            {/* PAGE TITLE & SUBTITLE */}
+            <div className="text-center space-y-2 max-w-3xl mx-auto">
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#C5A059]">
+                WEDDINGOS • WEDDING SETUP
+              </p>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#2D1B28] tracking-tight">
+                Let&apos;s Begin Your Wedding Story
+              </h1>
+              <p className="text-xs sm:text-sm text-[#7D597E] font-light max-w-xl mx-auto leading-relaxed">
+                Create your wedding workspace, invitations, RSVP system and guest experience — all in one place.
+              </p>
+
+              {/* Decorative Floral Ornament */}
+              <div className="flex items-center justify-center gap-3 pt-1 text-[#C5A059] opacity-75">
+                <span className="w-16 h-px bg-gradient-to-r from-transparent to-[#C5A059]" />
+                <span className="text-sm">✦ ❀ ✦</span>
+                <span className="w-16 h-px bg-gradient-to-l from-transparent to-[#C5A059]" />
+              </div>
+            </div>
+
+            {/* ================= 3-COLUMN SHOWCASE ================= */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+              {/* LEFT FEATURE CARDS (3 cols) */}
+              <div className="lg:col-span-3 space-y-2.5">
+                {[
+                  {
+                    icon: Send,
+                    title: "Send Invitations",
+                    desc: "Beautiful digital invites with a shareable link",
+                    active: true
+                  },
+                  {
+                    icon: Users,
+                    title: "Track RSVPs",
+                    desc: "Know who's coming in real time",
+                    active: false
+                  },
+                  {
+                    icon: Utensils,
+                    title: "Manage Catering",
+                    desc: "Collect food preferences and plan better",
+                    active: false
+                  },
+                  {
+                    icon: BarChart3,
+                    title: "Estimate Attendance",
+                    desc: "Get accurate counts for a zero-waste event",
+                    active: false
+                  },
+                  {
+                    icon: Bell,
+                    title: "Automated Reminders",
+                    desc: "Gentle nudges for better responses",
+                    active: false
+                  }
+                ].map((feat, idx) => (
+                  <div
+                    key={idx}
+                    className={cn(
+                      "p-3.5 rounded-2xl border transition-all flex items-start gap-3",
+                      feat.active
+                        ? "bg-[#FDF2F4] border-[#E8CCD5] shadow-xs"
+                        : "bg-white/80 border-[#E8DDCF]/80 hover:bg-white"
+                    )}
+                  >
+                    <div
+                      className={cn(
+                        "w-8 h-8 rounded-xl flex items-center justify-center flex-none",
+                        feat.active ? "text-[#74182E] bg-white shadow-xs border border-[#E8CCD5]" : "text-stone-500 bg-stone-100"
+                      )}
+                    >
+                      <feat.icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className={cn("text-xs font-serif font-bold", feat.active ? "text-[#74182E]" : "text-stone-800")}>
+                        {feat.title}
+                      </h4>
+                      <p className="text-[10px] text-stone-500 leading-snug mt-0.5 font-light">
+                        {feat.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              {/* Progress Stepper with Connected Lines */}
-              <div className="pt-2">
-                <div className="relative flex justify-between items-center">
-                  {/* Background connecting line */}
-                  <div className="absolute top-4 left-6 right-6 h-0.5 bg-[#E8DDCF] -z-0" />
-                  {/* Filled connecting line */}
+              {/* CENTER 3-STEP FORM (5 cols) */}
+              <div className="lg:col-span-5 bg-white rounded-3xl border border-[#E8DDCF] p-6 sm:p-7 shadow-soft-sm space-y-6">
+                {/* 3-Step Stepper Bar */}
+                <div className="relative flex justify-between items-center px-4 pt-1">
+                  {/* Connecting Line */}
+                  <div className="absolute top-4 left-10 right-10 h-0.5 bg-[#E8DDCF] -z-0" />
                   <div
-                    className="absolute top-4 left-6 h-0.5 bg-[#C5A059] transition-all duration-500 -z-0"
-                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 88}%` }}
+                    className="absolute top-4 left-10 h-0.5 bg-[#74182E] transition-all duration-300 -z-0"
+                    style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 80}%` }}
                   />
 
                   {steps.map((s) => {
-                    const isActive = s.id === currentStep;
                     const isDone = s.id < currentStep;
+                    const isActive = s.id === currentStep;
                     return (
                       <button
                         key={s.id}
+                        type="button"
                         onClick={() => {
                           if (s.id <= currentStep) setCurrentStep(s.id);
                         }}
-                        className="flex flex-col items-center relative z-10 group"
+                        className="flex flex-col items-center relative z-10"
                       >
                         <div
                           className={cn(
-                            "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300",
-                            isDone
-                              ? "bg-[#C5A059] text-white"
-                              : isActive
-                              ? "bg-[#C5A059] text-white ring-4 ring-[#C5A059]/25 shadow-md scale-110"
-                              : "bg-[#F3ECE1] text-stone-500 border border-[#E8DDCF]"
+                            "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
+                            isActive || isDone
+                              ? "bg-[#74182E] text-white shadow-sm ring-4 ring-[#74182E]/15"
+                              : "bg-white text-stone-400 border border-[#E8DDCF]"
                           )}
                         >
-                          {isDone ? <Check className="w-4 h-4 stroke-[2.5]" /> : s.id}
+                          {isDone ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : s.id}
                         </div>
                         <span
                           className={cn(
-                            "text-[10px] sm:text-[11px] mt-2 font-medium tracking-tight whitespace-nowrap transition-colors",
-                            isActive ? "text-[#74182E] font-bold" : isDone ? "text-stone-700" : "text-stone-400"
+                            "text-[11px] mt-1.5 font-medium tracking-tight",
+                            isActive ? "text-[#74182E] font-bold" : "text-stone-400"
                           )}
                         >
                           {s.title}
@@ -334,532 +429,437 @@ export default function SignupPage() {
                     );
                   })}
                 </div>
-              </div>
 
-              {/* Form Card */}
-              <div className="bg-white rounded-3xl border border-[#E8DDCF] p-6 sm:p-8 shadow-sm">
-                <div className="mb-6">
-                  <span className="text-xs font-mono font-medium text-[#C5A059] uppercase tracking-wider">
-                    Step {currentStep} of 5
-                  </span>
-                  <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2D1B28]">
-                    {steps[currentStep - 1].title}
-                  </h2>
-                  <p className="text-xs text-[#7D597E] mt-0.5">
-                    {currentStep === 1 && "Tell us about the beautiful couple"}
-                    {currentStep === 2 && "Auspicious date and royal venue location"}
-                    {currentStep === 3 && "Parents' names and auspicious family blessings"}
-                    {currentStep === 4 && "Select the sacred ceremonies you're hosting"}
-                    {currentStep === 5 && "Digital stationery aesthetics, music and catering"}
+                {/* Form Heading */}
+                <div className="text-center pt-1">
+                  <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#2D1B28]">
+                    {currentStep === 1 && "Tell us about the couple"}
+                    {currentStep === 2 && "Wedding Date & Venue"}
+                    {currentStep === 3 && "Personalize your wedding"}
+                  </h3>
+                  <p className="text-xs text-[#7D597E] mt-0.5 font-light">
+                    {currentStep === 1 && "Let's start with the most important details."}
+                    {currentStep === 2 && "Where and when the celebrations will unfold."}
+                    {currentStep === 3 && "Configure ceremonies and custom details."}
                   </p>
                 </div>
 
-                {/* STEP 1: Couple Details */}
+                {/* STEP 1: Couple Names & Email */}
                 {currentStep === 1 && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-4 pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                          Bride&apos;s Full Name *
+                        <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                          Bride&apos;s Name *
                         </label>
                         <div className="relative">
-                          <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                          <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                           <input
                             type="text"
-                            placeholder="Enter bride's name"
-                            value={formData.brideName}
-                            onChange={(e) => updateField("brideName", e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
+                            placeholder="Priya"
+                            value={brideName}
+                            onChange={(e) => setBrideName(e.target.value)}
+                            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                          Groom&apos;s Full Name *
+                        <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                          Groom&apos;s Name *
                         </label>
                         <div className="relative">
-                          <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                          <User className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                           <input
                             type="text"
-                            placeholder="Enter groom's name"
-                            value={formData.groomName}
-                            onChange={(e) => updateField("groomName", e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none focus:ring-1 focus:ring-[#C5A059]"
+                            placeholder="Rahul"
+                            value={groomName}
+                            onChange={(e) => setGroomName(e.target.value)}
+                            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1.5">
+                      <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                        Couple / Family Account Email *
+                      </label>
+                      <div className="relative">
+                        <Mail className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                        <input
+                          type="email"
+                          placeholder="couple@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 2: Wedding Date, Venue & City */}
+                {currentStep === 2 && (
+                  <div className="space-y-4 pt-1">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                        Wedding Date *
+                      </label>
+                      <div className="relative">
+                        <Calendar className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                        <input
+                          type="text"
+                          placeholder="12 December 2026"
+                          value={weddingDate}
+                          onChange={(e) => setWeddingDate(e.target.value)}
+                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                          City / Region *
+                        </label>
+                        <div className="relative">
+                          <MapPin className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                          <input
+                            type="text"
+                            placeholder="Hyderabad"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-stone-700 mb-1">
+                          Palace / Primary Venue *
+                        </label>
+                        <div className="relative">
+                          <Building className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                          <input
+                            type="text"
+                            placeholder="The Grand Palace"
+                            value={primaryVenue}
+                            onChange={(e) => setPrimaryVenue(e.target.value)}
+                            className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 3: Personalize */}
+                {currentStep === 3 && (
+                  <div className="space-y-4 pt-1">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-stone-700 mb-1">
                         Title (Surname Wedding)
                       </label>
                       <div className="relative">
-                        <Sparkles className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#C5A059]" />
+                        <Sparkles className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#C5A059]" />
                         <input
                           type="text"
                           placeholder="e.g. The Sharma & Verma Wedding"
-                          value={formData.weddingTitle}
-                          onChange={(e) => updateField("weddingTitle", e.target.value)}
-                          className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
+                          value={weddingTitle}
+                          onChange={(e) => setWeddingTitle(e.target.value)}
+                          className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
                         />
                       </div>
                     </div>
 
-                    {/* Upload Photos (Optional) */}
                     <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-2">
-                        Upload Photos (Optional)
+                      <label className="block text-[11px] font-semibold text-stone-700 mb-1.5">
+                        Select Sacred Ceremonies:
                       </label>
-                      <div className="grid grid-cols-3 gap-3 text-center">
-                        <div className="p-3 rounded-2xl border border-dashed border-[#E8DDCF] hover:border-[#C5A059] transition-colors cursor-pointer bg-stone-50/50">
-                          <div className="w-10 h-10 mx-auto rounded-full bg-[#FAF7F2] border border-[#E8DDCF] flex items-center justify-center mb-1 text-stone-400">
-                            <Upload className="w-4 h-4 text-[#C5A059]" />
-                          </div>
-                          <span className="text-[11px] font-semibold text-stone-700 block">Bride&apos;s Photo</span>
-                          <span className="text-[9px] text-stone-400">JPG, PNG (Max 5MB)</span>
-                        </div>
-
-                        <div className="p-3 rounded-2xl border border-dashed border-[#E8DDCF] hover:border-[#C5A059] transition-colors cursor-pointer bg-stone-50/50">
-                          <div className="w-10 h-10 mx-auto rounded-full bg-[#FAF7F2] border border-[#E8DDCF] flex items-center justify-center mb-1 text-stone-400">
-                            <Upload className="w-4 h-4 text-[#C5A059]" />
-                          </div>
-                          <span className="text-[11px] font-semibold text-stone-700 block">Groom&apos;s Photo</span>
-                          <span className="text-[9px] text-stone-400">JPG, PNG (Max 5MB)</span>
-                        </div>
-
-                        <div className="p-3 rounded-2xl border border-dashed border-[#E8DDCF] hover:border-[#C5A059] transition-colors cursor-pointer bg-stone-50/50">
-                          <div className="w-10 h-10 mx-auto rounded-full bg-[#FAF7F2] border border-[#E8DDCF] flex items-center justify-center mb-1 text-stone-400">
-                            <Upload className="w-4 h-4 text-[#C5A059]" />
-                          </div>
-                          <span className="text-[11px] font-semibold text-stone-700 block">Couple Photo</span>
-                          <span className="text-[9px] text-stone-400">JPG, PNG (Max 5MB)</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 2: Wedding Details */}
-                {currentStep === 2 && (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                          Wedding Date *
-                        </label>
-                        <div className="relative">
-                          <Calendar className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
-                          <input
-                            type="text"
-                            placeholder="e.g. 24 May 2026"
-                            value={formData.weddingDate}
-                            onChange={(e) => updateField("weddingDate", e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                          Ceremony Time *
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. 5:00 PM Onwards"
-                          value={formData.ceremonyTime}
-                          onChange={(e) => updateField("ceremonyTime", e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                          City / Destination *
-                        </label>
-                        <div className="relative">
-                          <MapPin className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
-                          <input
-                            type="text"
-                            placeholder="e.g. Hyderabad / Udaipur"
-                            value={formData.city}
-                            onChange={(e) => updateField("city", e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                          Primary Venue / Palace *
-                        </label>
-                        <div className="relative">
-                          <Building className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
-                          <input
-                            type="text"
-                            placeholder="e.g. Taj Falaknuma Palace"
-                            value={formData.primaryVenue}
-                            onChange={(e) => updateField("primaryVenue", e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                        Account Email Address *
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="couple@domain.com"
-                        value={formData.email}
-                        onChange={(e) => updateField("email", e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 3: Family Details */}
-                {currentStep === 3 && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                        Bride&apos;s Parents&apos; Names
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. D/o Smt. Sunita & Shri Rajesh Sharma"
-                        value={formData.brideParents}
-                        onChange={(e) => updateField("brideParents", e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                        Groom&apos;s Parents&apos; Names
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. S/o Smt. Anita & Shri Suresh Verma"
-                        value={formData.groomParents}
-                        onChange={(e) => updateField("groomParents", e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1.5">
-                        Auspicious Elder Blessing / Shloka Line
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. With the divine blessings of our beloved elders"
-                        value={formData.elderBlessing}
-                        onChange={(e) => updateField("elderBlessing", e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 4: Functions & Events */}
-                {currentStep === 4 && (
-                  <div className="space-y-4">
-                    <p className="text-xs font-semibold text-stone-700">
-                      Select ceremonies to showcase on your digital invitation timeline:
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {[
-                        "Mehendi & High Tea",
-                        "Haldi Ceremony",
-                        "Sangeet & Cocktail Gala",
-                        "Vedic Wedding Pheras",
-                        "Grand Palace Reception",
-                        "Welcome Dinner / Sundowner"
-                      ].map((fn) => {
-                        const isSelected = formData.functions.includes(fn);
-                        return (
-                          <div
-                            key={fn}
-                            onClick={() => toggleFunction(fn)}
-                            className={cn(
-                              "flex items-center space-x-2.5 p-3 rounded-xl border cursor-pointer transition-all",
-                              isSelected
-                                ? "border-[#C5A059] bg-[#C5A059]/10 text-[#2D1B28] font-semibold"
-                                : "border-[#E8DDCF] hover:bg-stone-50 text-stone-600"
-                            )}
-                          >
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        {["Mehendi", "Haldi", "Sangeet", "Wedding Ceremony", "Reception"].map((fn) => {
+                          const isSel = selectedFunctions.includes(fn);
+                          return (
                             <div
+                              key={fn}
+                              onClick={() => toggleFunction(fn)}
                               className={cn(
-                                "w-4 h-4 rounded-md flex items-center justify-center text-white text-[10px]",
-                                isSelected ? "bg-[#C5A059]" : "border border-stone-300"
+                                "p-2 rounded-xl border cursor-pointer flex items-center gap-2 transition-all select-none",
+                                isSel
+                                  ? "border-[#74182E] bg-[#74182E]/5 text-[#74182E] font-medium"
+                                  : "border-[#E8DDCF] text-stone-600 hover:bg-stone-50"
                               )}
                             >
-                              {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                              <div
+                                className={cn(
+                                  "w-3.5 h-3.5 rounded flex items-center justify-center text-white text-[9px]",
+                                  isSel ? "bg-[#74182E]" : "border border-stone-300"
+                                )}
+                              >
+                                {isSel && <Check className="w-2.5 h-2.5 stroke-[3]" />}
+                              </div>
+                              <span className="text-[11px]">{fn}</span>
                             </div>
-                            <span className="text-xs select-none">{fn}</span>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 )}
 
-                {/* STEP 5: Preferences */}
-                {currentStep === 5 && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1.5 flex items-center gap-1.5">
-                        <Music className="w-3.5 h-3.5 text-[#C5A059]" /> Background Music on Invitation Opening
-                      </label>
-                      <select
-                        value={formData.musicTheme}
-                        onChange={(e) => updateField("musicTheme", e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                      >
-                        <option value="Classical Shehnai & Sitar">Classical Shehnai & Sitar Ragas</option>
-                        <option value="Modern Royal Acoustic">Modern Royal Acoustic Romance</option>
-                        <option value="Bespoke Bansuri Flute">Bespoke Bansuri Flute</option>
-                        <option value="Silent">Silent / No Music</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-stone-700 mb-1.5 flex items-center gap-1.5">
-                        <Utensils className="w-3.5 h-3.5 text-[#C5A059]" /> Catering & Dining Preference
-                      </label>
-                      <select
-                        value={formData.dietaryType}
-                        onChange={(e) => updateField("dietaryType", e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#E8DDCF] text-xs sm:text-sm focus:border-[#C5A059] focus:outline-none"
-                      >
-                        <option value="Multi-Cuisine Royal Feast (Jain & Veg Counters)">
-                          Multi-Cuisine Royal Feast (Jain & Veg Counters)
-                        </option>
-                        <option value="Strict Pure Vegetarian & Jain Banquet">
-                          Strict Pure Vegetarian & Jain Banquet
-                        </option>
-                        <option value="Halal Certified Nawabi Cuisine">
-                          Halal Certified Nawabi Cuisine
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                )}
-
-                {/* Footer Buttons */}
-                <div className="pt-6 mt-6 border-t border-[#E8DDCF] flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={prevStep}
-                    disabled={currentStep === 1}
-                    className="px-5 py-2.5 rounded-full border border-[#E8DDCF] text-stone-600 text-xs font-semibold hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                  >
-                    ← Back
-                  </button>
+                {/* Action Buttons */}
+                <div className="pt-2 flex items-center gap-3">
+                  {currentStep > 1 && (
+                    <button
+                      type="button"
+                      onClick={prevStep}
+                      className="px-4 py-3.5 rounded-full border border-[#E8DDCF] text-stone-600 hover:bg-stone-50 text-xs font-serif font-semibold transition-all flex items-center justify-center gap-1"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      <span>Back</span>
+                    </button>
+                  )}
 
                   <button
                     type="button"
-                    onClick={currentStep === 5 ? () => handleCreateSubmit() : nextStep}
+                    onClick={currentStep === 3 ? () => handleCreateSubmit() : nextStep}
                     disabled={isSubmitting}
-                    className="px-8 py-2.5 rounded-full bg-[#C5A059] hover:bg-[#b08d47] text-white text-xs font-bold shadow-md transition-all flex items-center gap-2"
+                    className="flex-1 py-3.5 rounded-full bg-[#74182E] hover:bg-[#581223] text-white font-serif font-bold text-xs shadow-soft transition-all flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        <span>Creating Workspace...</span>
+                        <span>Initializing Workspace...</span>
                       </>
                     ) : (
                       <>
-                        <span>{currentStep === 5 ? "Complete & View Invitation" : "Continue →"}</span>
+                        <span>{currentStep === 3 ? "Complete Setup & Launch →" : "Continue →"}</span>
                       </>
                     )}
                   </button>
                 </div>
 
-                <div className="flex items-center justify-center gap-1.5 text-[11px] text-stone-400 text-center pt-4">
-                  <Lock className="w-3 h-3 text-stone-400" />
-                  <span>Your information is safe and confidential</span>
+                {/* Bottom Step Indicator with Progress Bar */}
+                <div className="pt-2 flex items-center justify-between text-[11px] text-stone-400 font-mono">
+                  <span>Step {currentStep} of 3</span>
+                  <div className="w-36 h-1.5 bg-[#E8DDCF]/60 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#74182E] transition-all duration-300"
+                      style={{ width: `${(currentStep / 3) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* RIGHT LIVE INVITATION CARD (4 cols) */}
+              <div className="lg:col-span-4 relative flex flex-col items-center">
+                {/* Live Preview Badge */}
+                <div className="mb-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#74182E] text-white text-[10px] font-semibold tracking-wider shadow-sm uppercase">
+                    <Eye className="w-3 h-3" />
+                    <span>Live Preview</span>
+                  </span>
+                </div>
+
+                {/* LUXURY ARCH INVITATION CARD */}
+                <div className="w-full max-w-[340px] rounded-[36px] bg-gradient-to-b from-[#FFFDF9] via-[#FAF6EE] to-[#F5EFE3] border border-[#C5A059]/40 p-6 shadow-2xl relative overflow-hidden text-center">
+                  {/* Subtle Inner Gold Arch Border */}
+                  <div className="absolute inset-2.5 rounded-[30px] border border-[#C5A059]/35 pointer-events-none" />
+                  <div className="absolute inset-3 rounded-[28px] border border-[#C5A059]/15 pointer-events-none" />
+
+                  {/* Top Watercolor Garland Artwork */}
+                  <div className="w-full flex justify-center -mt-2 mb-2 select-none pointer-events-none">
+                    <svg viewBox="0 0 260 70" className="w-56 h-auto" fill="none">
+                      <path d="M15 50 C70 15 190 15 245 50" stroke="#C5A059" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+                      {/* Leaves */}
+                      <path d="M45 30 C35 18 55 12 65 25 Z" fill="#8D9E80" opacity="0.8" />
+                      <path d="M75 22 C85 10 95 24 85 30 Z" fill="#A3B496" opacity="0.85" />
+                      <path d="M175 22 C165 10 155 24 165 30 Z" fill="#A3B496" opacity="0.85" />
+                      <path d="M205 30 C215 18 195 12 185 25 Z" fill="#8D9E80" opacity="0.8" />
+                      {/* Flowers */}
+                      <circle cx="130" cy="22" r="10" fill="#EAA4AD" />
+                      <circle cx="130" cy="22" r="5" fill="#8C2534" />
+                      <circle cx="95" cy="28" r="7" fill="#F7CEB6" />
+                      <circle cx="165" cy="28" r="7" fill="#F7CEB6" />
+                      <circle cx="65" cy="38" r="5" fill="#F3BCC3" />
+                      <circle cx="195" cy="38" r="5" fill="#F3BCC3" />
+                    </svg>
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="space-y-2.5 py-1">
+                    <p className="text-[10px] font-serif tracking-[0.22em] text-[#C5A059] uppercase font-bold">
+                      THE WEDDING OF
+                    </p>
+
+                    {/* Couple Names in Elegant Great Vibes Calligraphy Script */}
+                    <div className="py-1">
+                      <h3 className="text-3xl sm:text-4xl font-script text-[#74182E] font-normal tracking-wide drop-shadow-xs">
+                        {groomName || "Rahul"} &amp; {brideName || "Priya"}
+                      </h3>
+                    </div>
+
+                    {/* Floral Separator Motif */}
+                    <div className="text-[11px] text-[#C5A059] opacity-80 select-none">
+                      ✦ ❀ ✦
+                    </div>
+
+                    {/* Date */}
+                    <div className="pt-1 flex items-center justify-center gap-1.5 text-xs text-stone-700 font-serif font-semibold">
+                      <Calendar className="w-3.5 h-3.5 text-[#C5A059]" />
+                      <span>{weddingDate || "12 December 2026"}</span>
+                    </div>
+
+                    {/* Location */}
+                    <div className="flex items-center justify-center gap-1.5 text-[11px] text-stone-500 font-light">
+                      <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
+                      <span>{city || "Hyderabad"}</span>
+                    </div>
+
+                    {/* Wedding Title Badge */}
+                    {weddingTitle && (
+                      <div className="pt-1">
+                        <span className="text-[10px] font-serif text-[#74182E] bg-[#74182E]/5 px-3 py-1 rounded-full border border-[#74182E]/10 tracking-wide">
+                          {weddingTitle}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bottom Golden Heritage Palace Illustration */}
+                  <div className="w-full pt-4 mt-3 border-t border-[#C5A059]/20 flex flex-col items-center select-none pointer-events-none">
+                    <svg viewBox="0 0 280 110" className="w-64 h-auto" fill="none">
+                      {/* Floral clusters flanking the palace */}
+                      <g opacity="0.85">
+                        <circle cx="28" cy="85" r="9" fill="#EAA4AD" />
+                        <circle cx="28" cy="85" r="4" fill="#8C2534" />
+                        <path d="M15 95 C25 80 40 85 30 100 Z" fill="#8D9E80" />
+                        <circle cx="252" cy="85" r="9" fill="#EAA4AD" />
+                        <circle cx="252" cy="85" r="4" fill="#8C2534" />
+                        <path d="M265 95 C255 80 240 85 250 100 Z" fill="#8D9E80" />
+                      </g>
+
+                      {/* Palace Silhouette & Domes in Antique Gold */}
+                      <g fill="#C5A059" opacity="0.55">
+                        {/* Central Grand Dome */}
+                        <path d="M140 15 C125 15 120 35 120 50 L160 50 C160 35 155 15 140 15 Z" />
+                        <rect x="138" y="5" width="4" height="10" />
+                        <circle cx="140" cy="5" r="3" />
+                        {/* Side Domes */}
+                        <path d="M95 30 C85 30 80 45 80 55 L110 55 C110 45 105 30 95 30 Z" />
+                        <rect x="93.5" y="22" width="3" height="8" />
+                        <path d="M185 30 C175 30 170 45 170 55 L200 55 C200 45 195 30 185 30 Z" />
+                        <rect x="183.5" y="22" width="3" height="8" />
+                        {/* Minarets */}
+                        <rect x="60" y="35" width="8" height="40" />
+                        <path d="M64 22 L58 35 L70 35 Z" />
+                        <rect x="212" y="35" width="8" height="40" />
+                        <path d="M216 22 L210 35 L222 35 Z" />
+                        {/* Palace Base & Arches */}
+                        <rect x="50" y="55" width="180" height="25" rx="2" />
+                        <rect x="30" y="75" width="220" height="15" rx="2" />
+                        {/* Arches Cutouts */}
+                        <path d="M130 75 C130 62 150 62 150 75 Z" fill="#FAF6EE" />
+                        <path d="M105 75 C105 65 120 65 120 75 Z" fill="#FAF6EE" />
+                        <path d="M160 75 C160 65 175 65 175 75 Z" fill="#FAF6EE" />
+                        <path d="M85 75 C85 67 97 67 97 75 Z" fill="#FAF6EE" />
+                        <path d="M183 75 C183 67 195 67 195 75 Z" fill="#FAF6EE" />
+                      </g>
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: LIVE REAL-TIME PREVIEW */}
-            <div className="lg:col-span-5 sticky top-24 space-y-4">
-              <div className="bg-[#F8F5EE] border border-[#E8DDCF] rounded-3xl p-5 shadow-sm space-y-4">
-                {/* Live Preview Bar */}
-                <div className="flex items-center justify-between pb-3 border-b border-[#E8DDCF]">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-serif font-bold tracking-wide text-[#2D1B28]">Live Preview</span>
-                  </div>
+            {/* ================= BOTTOM WORKSPACES SECTION ================= */}
+            <div className="pt-10 border-t border-[#E8DDCF]/80 space-y-4">
+              <div className="text-center space-y-1">
+                <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#2D1B28]">
+                  Your Wedding Workspaces
+                </h3>
+                <p className="text-xs text-[#7D597E] font-light">
+                  Manage your weddings, invitations and guests from one place.
+                </p>
+              </div>
 
-                  <div className="flex items-center p-0.5 rounded-lg bg-stone-200/60 text-[11px]">
-                    <button
-                      onClick={() => setDeviceMode("mobile")}
-                      className={cn(
-                        "px-2.5 py-1 rounded-md flex items-center gap-1 transition-all",
-                        deviceMode === "mobile"
-                          ? "bg-white text-[#2D1B28] shadow-sm font-semibold"
-                          : "text-stone-500 hover:text-stone-900"
-                      )}
-                    >
-                      <Smartphone className="w-3 h-3" />
-                      <span>Mobile</span>
-                    </button>
-                    <button
-                      onClick={() => setDeviceMode("desktop")}
-                      className={cn(
-                        "px-2.5 py-1 rounded-md flex items-center gap-1 transition-all",
-                        deviceMode === "desktop"
-                          ? "bg-white text-[#2D1B28] shadow-sm font-semibold"
-                          : "text-stone-500 hover:text-stone-900"
-                      )}
-                    >
-                      <Laptop className="w-3 h-3" />
-                      <span>Desktop</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Device Frame */}
-                <div className="flex justify-center">
-                  <div
-                    className={cn(
-                      "transition-all duration-300 rounded-[32px] border-4 border-stone-800 bg-stone-900 p-2 shadow-2xl overflow-hidden",
-                      deviceMode === "mobile" ? "w-[270px] sm:w-[290px] h-[520px]" : "w-full h-[400px]"
-                    )}
-                  >
-                    {/* Screen View */}
-                    <div
-                      className={cn(
-                        "w-full h-full rounded-[24px] overflow-y-auto p-4 flex flex-col items-center justify-between text-center relative border border-[#C5A059]/30",
-                        selectedTheme.previewBg
-                      )}
-                    >
-                      {/* Decorative Floral Header Corner */}
-                      <div className="w-full flex justify-between items-center text-[9px] text-[#C5A059] opacity-70 uppercase tracking-widest pt-1">
-                        <span>✦ ✦ ✦</span>
-                        <span>॥ श्री गणेशाय नमः ॥</span>
-                        <span>✦ ✦ ✦</span>
-                      </div>
-
-                      {/* Main Invitation Card Content */}
-                      <div className="my-auto space-y-2 py-4">
-                        <p className="text-[10px] uppercase tracking-widest text-[#C5A059] font-medium">
-                          Together with their families
-                        </p>
-
-                        <div className="space-y-0.5">
-                          <h3 className="text-3xl font-serif font-bold text-[#74182E] tracking-tight">
-                            {formData.brideName || "Bride"}
-                          </h3>
-                          <span className="text-sm font-serif italic text-[#C5A059] block">&</span>
-                          <h3 className="text-3xl font-serif font-bold text-[#74182E] tracking-tight">
-                            {formData.groomName || "Groom"}
-                          </h3>
-                        </div>
-
-                        <p className="text-[10px] text-stone-600 max-w-[200px] mx-auto leading-relaxed pt-1">
-                          request your auspicious presence at their Wedding Celebration
-                        </p>
-
-                        {/* Date badge */}
-                        <div className="py-2">
-                          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#C5A059]/40 shadow-sm text-[11px] font-serif font-bold text-[#74182E]">
-                            <Calendar className="w-3 h-3 text-[#C5A059]" />
-                            <span>{formData.weddingDate || "24 May 2026"}</span>
-                          </div>
-                        </div>
-
-                        {/* Venue */}
-                        <div className="space-y-0.5 text-[10px] text-stone-700">
-                          <p className="font-semibold text-xs text-[#2D1B28]">
-                            {formData.primaryVenue || "The Grand Palace"}
-                          </p>
-                          <p className="text-stone-500">{formData.city || "Hyderabad"}</p>
-                          <p className="text-[#C5A059] font-mono text-[9px]">{formData.ceremonyTime}</p>
-                        </div>
-
-                        {/* Title (Surname Wedding) */}
-                        {formData.weddingTitle && (
-                          <div className="pt-2">
-                            <span className="text-[10px] font-serif font-bold text-[#74182E] bg-[#74182E]/5 px-3 py-1 rounded-full border border-[#74182E]/15 tracking-wide">
-                              ✦ {formData.weddingTitle} ✦
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Bottom Seal */}
-                      <div className="w-full pt-2 border-t border-[#C5A059]/30 flex items-center justify-between text-[8px] text-stone-500">
-                        <span>WeddingOS Royal Pass</span>
-                        <Heart className="w-2.5 h-2.5 text-[#C5A059] fill-[#C5A059]" />
-                        <span>Instant RSVP</span>
+              {/* Workspace Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto pt-2">
+                {/* Card 1: Ratna & Vag */}
+                <div className="p-4 rounded-2xl bg-white border border-[#E8DDCF] shadow-xs flex items-center justify-between gap-4 hover:border-[#74182E]/30 transition-all">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-stone-100 flex-none relative border border-[#E8DDCF]">
+                      <img
+                        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=300&q=80"
+                        alt="Ratna & Vag"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="space-y-0.5">
+                      <h4 className="text-sm font-serif font-bold text-[#2D1B28]">
+                        Ratna &amp; Vag
+                      </h4>
+                      <div className="flex items-center gap-2 text-[11px] text-stone-500">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3 text-[#C5A059]" />
+                          12 December 2026
+                        </span>
+                        <span>•</span>
+                        <span>Hyderabad</span>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Theme Selector Strip */}
-                <div className="pt-2">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold text-stone-700 flex items-center gap-1">
-                      <Palette className="w-3 h-3 text-[#C5A059]" /> Selected Theme:
-                      <span className="text-[#74182E] font-bold">{selectedTheme.name}</span>
-                    </span>
-                    <span className="text-[10px] text-stone-400">Click to switch</span>
-                  </div>
-
-                  <div className="grid grid-cols-5 gap-2">
-                    {themes.map((th) => {
-                      const isSelected = th.id === selectedTheme.id;
-                      return (
-                        <button
-                          key={th.id}
-                          onClick={() => setSelectedTheme(th)}
-                          className={cn(
-                            "group p-1.5 rounded-xl border flex flex-col items-center gap-1 transition-all",
-                            isSelected
-                              ? "border-[#C5A059] bg-white ring-2 ring-[#C5A059]/30 shadow-sm scale-105"
-                              : "border-[#E8DDCF] hover:border-stone-400 bg-white/50"
-                          )}
-                        >
-                          <div
-                            className={cn(
-                              "w-full h-8 rounded-lg border border-black/10 flex items-center justify-center text-[10px]",
-                              th.previewBg
-                            )}
-                          >
-                            <span className="text-[8px] font-bold" style={{ color: th.primary }}>
-                              {th.name.split(" ")[0]}
-                            </span>
-                          </div>
-                          <span className="text-[9px] text-stone-600 truncate w-full block text-center">
-                            {th.name.split(" ")[0]}
-                          </span>
-                        </button>
-                      );
-                    })}
+                  <div className="flex items-center gap-2 flex-none">
+                    <button
+                      onClick={() => handleSelectAndLogin("wed-demo-01")}
+                      className="px-4 py-1.5 rounded-full bg-[#74182E] text-white text-[11px] font-serif font-semibold hover:bg-[#581223] transition-colors shadow-xs"
+                    >
+                      Manage →
+                    </button>
                   </div>
                 </div>
 
-                {/* Value Card */}
-                <div className="p-3.5 rounded-2xl bg-white border border-[#E8DDCF] flex items-center gap-3 shadow-xs">
-                  <div className="w-9 h-9 rounded-full bg-[#FAF7F2] border border-[#C5A059]/40 flex items-center justify-center flex-none">
-                    <Sparkles className="w-4 h-4 text-[#C5A059]" />
+                {/* Card 2: Rahul & Priya */}
+                <div className="p-4 rounded-2xl bg-white border border-[#E8DDCF] shadow-xs flex items-center justify-between gap-4 hover:border-[#74182E]/30 transition-all">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-stone-100 flex-none relative border border-[#E8DDCF]">
+                      <img
+                        src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=300&q=80"
+                        alt="Rahul & Priya"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="space-y-0.5">
+                      <h4 className="text-sm font-serif font-bold text-[#2D1B28]">
+                        Rahul &amp; Priya
+                      </h4>
+                      <div className="flex items-center gap-2 text-[11px] text-stone-500">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3 text-[#C5A059]" />
+                          12 December 2026
+                        </span>
+                        <span>•</span>
+                        <span>Hyderabad</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[11px] leading-tight">
-                    <p className="font-semibold text-stone-800">Get a beautiful, shareable invitation</p>
-                    <p className="text-stone-500 font-light mt-0.5">
-                      Once you complete the form, you can preview, edit guest lists, and send via WhatsApp.
-                    </p>
+
+                  <div className="flex items-center gap-2 flex-none">
+                    <Link
+                      href="/invite/rahul-priya"
+                      target="_blank"
+                      className="px-3 py-1.5 rounded-full border border-[#E8DDCF] text-[11px] text-stone-700 font-serif font-semibold hover:bg-stone-50 transition-colors flex items-center gap-1"
+                    >
+                      <Send className="w-3 h-3 text-[#74182E]" />
+                      <span>Invite</span>
+                    </Link>
+                    <button
+                      onClick={() => handleSelectAndLogin("wed-demo-02")}
+                      className="px-4 py-1.5 rounded-full bg-[#74182E] text-white text-[11px] font-serif font-semibold hover:bg-[#581223] transition-colors shadow-xs"
+                    >
+                      Manage →
+                    </button>
                   </div>
                 </div>
               </div>
@@ -868,9 +868,9 @@ export default function SignupPage() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="w-full border-t border-[#E8DDCF]/80 py-4 px-6 text-center text-xs text-stone-500">
-        WeddingOS • Luxury Digital Stationery & Guest Operations Platform
+      {/* ================= FOOTER ================= */}
+      <footer className="w-full border-t border-[#E8DDCF]/80 py-4 px-6 text-center text-xs text-stone-500 bg-[#FAF7F2]">
+        WeddingOS • Luxury Digital Stationery &amp; Guest Operations Platform
       </footer>
     </div>
   );
