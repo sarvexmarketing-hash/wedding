@@ -375,9 +375,7 @@ function SignupContent() {
       {/* ================= TOP NAVBAR ================= */}
       <header className="w-full border-b border-[#E8DDCF]/80 bg-[#FAF7F2]/90 backdrop-blur-md px-6 lg:px-12 py-3.5 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2">
-            <Logo size="md" />
-          </Link>
+          <Logo size="md" />
           <nav className="hidden md:flex items-center gap-7 text-xs font-serif font-medium text-stone-600">
             <Link href="/features" className="hover:text-[#74182E] transition-colors">Features</Link>
             <Link href="/features/invitations" className="hover:text-[#74182E] transition-colors">Templates</Link>
