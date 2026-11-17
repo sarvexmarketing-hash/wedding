@@ -20,7 +20,7 @@ export default function ProductDeepDivePage() {
             The Operating System Behind the Wedding.
           </h1>
           <p className="text-base sm:text-lg text-[#654566]">
-            WeddingOS is engineered from the ground up for multi-day, multi-generational Indian weddings where operations and hospitality matter as much as aesthetics.
+            WeddingOS is engineered from the ground up for multi-day, multi-generational Indian occasions where operations and hospitality matter as much as aesthetics.
           </p>
           <div className="pt-2">
             <Link

@@ -12,8 +12,8 @@ export function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <Logo size="lg" variant="light" />
             <p className="text-sm text-[#B89EB8] max-w-sm leading-relaxed">
-              WeddingOS is the all-in-one Wedding Guest Management & Operations Platform for Indian weddings.
-              Run your wedding like a system, not a spreadsheet.
+              WeddingOS is the all-in-one Guest Management & Operations Platform for Indian occasions.
+              Run your occasion like a system, not a spreadsheet.
             </p>
             <div className="flex items-center gap-3 pt-2 text-xs text-[#E1CD98]">
               <span className="flex items-center gap-1.5 bg-[#380714] px-2.5 py-1 rounded-full border border-[#74182E]">
@@ -60,20 +60,20 @@ export function Footer() {
               <li><Link href="/contact" className="hover:text-white transition-colors">Contact & Demo Booking</Link></li>
               <li><Link href="/login" className="hover:text-white transition-colors">Client Portal Log In</Link></li>
               <li><Link href="/admin" className="text-[#E1CD98] hover:underline transition-colors flex items-center gap-1">Admin Portal →</Link></li>
-              <li><Link href="/signup" className="hover:text-white transition-colors">Create Free Wedding</Link></li>
+              <li><Link href="/signup" className="hover:text-white transition-colors">Create Free Occasion</Link></li>
               <li><span className="text-xs text-[#987599]">Designed for Delhi, Mumbai, Hyderabad, Udaipur & Global Destinations</span></li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#987599] gap-4">
-          <p>© {new Date().getFullYear()} WeddingOS Inc. Run Your Wedding Like a System, Not a Spreadsheet.</p>
+          <p>© {new Date().getFullYear()} WeddingOS Inc. Run Your Occasion Like a System, Not a Spreadsheet.</p>
           <div className="flex items-center gap-6">
             <span>Privacy Policy</span>
             <span>Terms of Service</span>
             <span>Security Guarantee</span>
             <span className="flex items-center gap-1 text-[#E1CD98]">
-              Crafted with <Heart className="w-3.5 h-3.5 text-[#CE3B61] fill-current" /> for Indian Weddings
+              Crafted with <Heart className="w-3.5 h-3.5 text-[#CE3B61] fill-current" /> for Indian Occasions
             </span>
           </div>
         </div>

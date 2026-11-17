@@ -94,10 +94,10 @@ export default function AdminWeddingsPage() {
             <span className="text-xs text-stone-400">{allWeddings.length} Active Workspaces</span>
           </div>
           <h1 className="text-2xl font-serif font-bold text-white mt-1">
-            Weddings Directory & Client Workspaces
+            Occasions Directory & Client Workspaces
           </h1>
           <p className="text-xs text-stone-400">
-            Provision, inspect, modify subscription tiers, and log directly into any client wedding operating system.
+            Provision, inspect, modify subscription tiers, and log directly into any client occasion operating system.
           </p>
         </div>
 
@@ -106,7 +106,7 @@ export default function AdminWeddingsPage() {
           className="px-4 py-2.5 rounded-xl bg-[#74182E] hover:bg-[#581223] text-white text-xs font-semibold shadow-soft flex items-center gap-1.5 transition-colors self-start sm:self-auto"
         >
           <Plus className="w-4 h-4 text-[#E1CD98]" />
-          <span>Provision VIP Wedding</span>
+          <span>Provision VIP Occasion</span>
         </button>
       </div>
 
@@ -147,13 +147,13 @@ export default function AdminWeddingsPage() {
         </div>
       </div>
 
-      {/* Weddings Table */}
+      {/* Occasions Table */}
       <div className="bg-[#160E15] rounded-2xl border border-[#2D1B28] overflow-hidden shadow-soft">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="bg-[#211520]/80 border-b border-[#2D1B28] text-stone-400">
-                <th className="py-3 px-4 font-semibold">Wedding Details</th>
+                <th className="py-3 px-4 font-semibold">Occasion Details</th>
                 <th className="py-3 px-4 font-semibold">Date & City</th>
                 <th className="py-3 px-4 font-semibold">Venue</th>
                 <th className="py-3 px-4 font-semibold">Plan Tier</th>

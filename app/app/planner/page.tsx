@@ -36,7 +36,7 @@ export default function PlannerDashboardPage() {
             Planner Portfolio Portal
           </h1>
           <p className="text-xs text-[#7D597E]">
-            Manage 12 high-end destination weddings, client teams, headcounts, and live operations from one master account.
+            Manage 12 high-end destination occasions, client teams, headcounts, and live operations from one master account.
           </p>
         </div>
 
@@ -46,17 +46,17 @@ export default function PlannerDashboardPage() {
             onChange={e => setFilterCity(e.target.value)}
             className="px-3 py-2 rounded-xl border border-[#E8DDCF] text-xs font-semibold text-[#2D1B28] bg-white"
           >
-            <option value="all">All Destinations (12 Weddings)</option>
+            <option value="all">All Destinations (12 Occasions)</option>
             <option value="hyderabad">Hyderabad</option>
             <option value="udaipur">Udaipur</option>
             <option value="jaipur">Jaipur</option>
             <option value="goa">Goa</option>
           </select>
           <button
-            onClick={() => alert("Add New Client Wedding Flow: Enter Bride & Groom names, date, and venue.")}
+            onClick={() => alert("Add New Client Occasion Flow: Enter Host names, date, and venue.")}
             className="px-4 py-2 rounded-xl bg-[#74182E] text-white text-xs font-semibold hover:bg-[#581223] transition-colors flex items-center gap-1.5 shadow-soft"
           >
-            <Plus className="w-4 h-4 text-[#E1CD98]" /> Onboard New Wedding
+            <Plus className="w-4 h-4 text-[#E1CD98]" /> Onboard New Occasion
           </button>
         </div>
       </div>
@@ -64,7 +64,7 @@ export default function PlannerDashboardPage() {
       {/* Portfolio High-Level Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-4 rounded-2xl bg-white border border-[#E8DDCF] shadow-soft">
-          <div className="text-xs text-[#7D597E] font-medium">Active Weddings</div>
+          <div className="text-xs text-[#7D597E] font-medium">Active Occasions</div>
           <div className="text-3xl font-serif font-bold text-[#2D1B28] mt-1">12</div>
           <div className="text-[11px] text-stone-500 mt-1">Across 8 luxury destinations</div>
         </div>

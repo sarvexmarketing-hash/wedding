@@ -54,14 +54,14 @@ export default function HomePage() {
           {/* Eyebrow */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#74182E]/10 border border-[#74182E]/20 text-[#74182E] text-xs font-semibold tracking-widest uppercase shadow-sm animate-fade-in backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-            <span>The Wedding Operating System</span>
+            <span>The Occasion Operating System</span>
           </div>
 
           {/* Main Headline with TechText for "Weddings," */}
           <div className="space-y-1">
             <div className="w-full h-20 sm:h-28 md:h-36 max-w-3xl mx-auto relative flex items-center justify-center">
               <TechText
-                text="Weddings,"
+                text="Occasions,"
                 fontFamily="Playfair Display, Cormorant Garamond, Georgia, serif"
                 fontWeight={700}
                 fontSize={96}
@@ -102,7 +102,7 @@ export default function HomePage() {
                 href="/signup"
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 active:translate-y-0"
               >
-                <span>Create Your Wedding Free</span>
+                <span>Create Your Occasion Free</span>
                 <ArrowRight className="w-5 h-5 text-[#E1CD98]" />
               </Link>
             </MagneticButton>
@@ -174,7 +174,7 @@ export default function HomePage() {
           </div>
 
           <blockquote className="text-xl sm:text-3xl font-serif italic text-[#2D1B28] leading-relaxed">
-            &ldquo;WeddingOS transformed our 3-day Falaknuma wedding into a seamless royal experience. Our 300+ outstation guests had digital passes, our caterers had exact plate numbers, and not a single spreadsheet was opened.&rdquo;
+            &ldquo;WeddingOS transformed our 3-day Falaknuma occasion into a seamless royal experience. Our 300+ outstation guests had digital passes, our caterers had exact plate numbers, and not a single spreadsheet was opened.&rdquo;
           </blockquote>
 
           <div className="space-y-1">
@@ -196,7 +196,7 @@ export default function HomePage() {
               Ready to Upgrade?
             </span>
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#2D1B28]">
-              Run Your Wedding Like a System.
+              Run Your Occasion Like a System.
             </h2>
             <p className="text-sm sm:text-base text-[#654566] max-w-xl mx-auto leading-relaxed">
               Join hundreds of couples managing invitations, RSVPs, families, and catering operations with zero spreadsheets.
@@ -209,7 +209,7 @@ export default function HomePage() {
                 href="/signup"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#74182E] text-white text-base font-semibold shadow-soft-xl hover:bg-[#581223] transition-all transform hover:-translate-y-0.5"
               >
-                <span>Create Your Wedding Free</span>
+                <span>Create Your Occasion Free</span>
                 <ArrowRight className="w-5 h-5 text-[#E1CD98]" />
               </Link>
             </MagneticButton>

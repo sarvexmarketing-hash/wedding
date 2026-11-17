@@ -80,7 +80,7 @@ export function Navbar() {
               href="/signup"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#74182E] text-white text-sm font-medium shadow-soft hover:bg-[#581223] transition-all transform hover:-translate-y-0.5 active:translate-y-0"
             >
-              <span>Create Your Wedding</span>
+              <span>Create Your Occasion</span>
               <ArrowRight className="w-4 h-4 text-[#E1CD98]" />
             </Link>
           </div>
@@ -144,7 +144,7 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-lg text-sm font-medium text-[#2D1B28] hover:bg-[#FAF7F2]"
             >
-              For Wedding Planners
+              For Occasion Planners
             </Link>
             <Link
               href="/features/rsvp"
@@ -196,7 +196,7 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="w-full text-center py-2.5 rounded-full bg-[#74182E] text-white text-sm font-medium"
             >
-              Create Your Wedding Free
+              Create Your Occasion Free
             </Link>
           </div>
         </div>

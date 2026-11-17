@@ -71,25 +71,25 @@ export default function LoginPage() {
           Log in to WeddingOS
         </h2>
         <p className="text-xs text-[#7D597E]">
-          Select one of your created weddings below to log in directly, or enter your credentials.
+          Select one of your created occasions below to log in directly, or enter your credentials.
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl space-y-6">
-        {/* SECTION: CREATED WEDDINGS CARDS LIST */}
+        {/* SECTION: CREATED OCCASIONS CARDS LIST */}
         <div className="bg-white p-6 rounded-3xl border border-[#E8DDCF] shadow-soft space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-[#FAF7F2]">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-wider text-[#74182E]">
-                Created Weddings ({allWeddings.length})
+                Created Occasions ({allWeddings.length})
               </span>
             </div>
             <Link
               href="/signup"
               className="text-xs font-semibold text-[#74182E] hover:underline flex items-center gap-1"
             >
-              <Plus className="w-3.5 h-3.5" /> Create New Wedding
+              <Plus className="w-3.5 h-3.5" /> Create New Occasion
             </Link>
           </div>
 
@@ -220,8 +220,8 @@ export default function LoginPage() {
                 onClick={() => handleQuickDemoLogin("planner")}
                 className="p-2 bg-[#FAF7F2] hover:bg-[#F3ECE1] border border-[#E8DDCF] rounded-xl text-left text-[11px] transition-colors"
               >
-                <strong className="text-[#74182E] block">Wedding Planner</strong>
-                <span className="text-stone-500 text-[10px]">12 Weddings Portal</span>
+                <strong className="text-[#74182E] block">Occasion Planner</strong>
+                <span className="text-stone-500 text-[10px]">12 Occasions Portal</span>
               </button>
               <button
                 type="button"

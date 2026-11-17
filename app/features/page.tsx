@@ -63,7 +63,7 @@ export default function FeaturesOverviewPage() {
                 Direct Comparison
               </span>
               <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#2D1B28]">
-                Why Traditional Spreadsheets Fail Royal Weddings
+                Why Traditional Spreadsheets Fail Royal Occasions
               </h2>
             </div>
 

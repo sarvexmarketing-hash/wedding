@@ -101,7 +101,7 @@ export default function AdminOverviewPage() {
             className="px-4 py-2 rounded-xl bg-[#74182E] hover:bg-[#581223] text-white text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-soft"
           >
             <Plus className="w-3.5 h-3.5 text-[#E1CD98]" />
-            <span>Manage All Weddings</span>
+            <span>Manage All Occasions</span>
           </Link>
         </div>
       </div>
@@ -111,7 +111,7 @@ export default function AdminOverviewPage() {
         {/* Metric 1 */}
         <div className="p-5 rounded-2xl bg-[#160E15] border border-[#2D1B28] space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-stone-400 font-medium">Total Client Weddings</span>
+            <span className="text-xs text-stone-400 font-medium">Total Client Occasions</span>
             <div className="w-8 h-8 rounded-lg bg-[#211520] border border-[#3A2234] flex items-center justify-center text-[#C5A059]">
               <Heart className="w-4 h-4" />
             </div>
@@ -187,14 +187,14 @@ export default function AdminOverviewPage() {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs uppercase font-bold tracking-wider text-[#C5A059]">
-                Live Client Weddings ({allWeddings.length})
+                Live Client Occasions ({allWeddings.length})
               </span>
               <span className="text-[10px] bg-[#211520] text-stone-300 px-2 py-0.5 rounded-full border border-[#3A2234]">
                 Instant Impersonate Enabled
               </span>
             </div>
             <p className="text-xs text-stone-400 mt-0.5">
-              Select any wedding to log directly into its operations workspace or test its guest invite card.
+              Select any occasion to log directly into its operations workspace or test its guest invite card.
             </p>
           </div>
 

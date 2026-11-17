@@ -15,7 +15,7 @@ interface CounterItem {
 
 const stats: CounterItem[] = [
   {
-    label: "Weddings Organized",
+    label: "Occasions Organized",
     sublabel: "Across Falaknuma, Udaipur, Jaipur & Lake Como",
     value: 12480,
     suffix: "+",

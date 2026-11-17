@@ -16,25 +16,25 @@ export default function AboutPage() {
             Our Purpose
           </span>
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-[#2D1B28]">
-            Built for the Grandeur and Complexity of Indian Weddings.
+            Built for the Grandeur and Complexity of Indian Occasions.
           </h1>
           <p className="text-base sm:text-lg text-[#654566]">
-            We started WeddingOS because we experienced firsthand how traditional weddings unravel across WhatsApp groups, conflicting spreadsheets, and stressed parents.
+            We started WeddingOS because we experienced firsthand how traditional occasions unravel across WhatsApp groups, conflicting spreadsheets, and stressed parents.
           </p>
         </div>
 
         <div className="max-w-4xl mx-auto bg-white rounded-3xl p-8 sm:p-12 border border-[#E8DDCF] shadow-soft space-y-6 text-sm sm:text-base leading-relaxed text-[#4D334E]">
           <h2 className="text-2xl font-serif font-bold text-[#2D1B28]">
-            “Run Your Wedding Like a System, Not a Spreadsheet.”
+            “Run Your Occasion Like a System, Not a Spreadsheet.”
           </h2>
           <p>
-            An Indian wedding is not a single two-hour event. It is a multi-day festival uniting two families, hundreds of guests, complex dietary preferences, multiple venues, and hundreds of moving parts.
+            An Indian occasion is not a single two-hour event. It is a multi-day festival uniting two families, hundreds of guests, complex dietary preferences, multiple venues, and hundreds of moving parts.
           </p>
           <p>
-            While Western wedding products focus primarily on a simple invitation registry or static website, Indian weddings require genuine operational infrastructure: family grouping, multi-function RSVP, Jain meal isolation, airport shuttles, and day-of gate admission.
+            While Western wedding products focus primarily on a simple invitation registry or static website, Indian occasions require genuine operational infrastructure: family grouping, multi-function RSVP, Jain meal isolation, airport shuttles, and day-of gate admission.
           </p>
           <p>
-            WeddingOS combines luxury aesthetics inspired by royal Indian palaces with enterprise-grade operational software. We believe couples and their families deserve to be fully present and joyful on their wedding day, confident that the system underneath is keeping every guest and detail organized.
+            WeddingOS combines luxury aesthetics inspired by royal Indian palaces with enterprise-grade operational software. We believe couples and their families deserve to be fully present and joyful on their occasion day, confident that the system underneath is keeping every guest and detail organized.
           </p>
           <div className="pt-4 border-t border-[#E8DDCF] flex items-center justify-between">
             <span className="font-serif italic text-stone-500">— The WeddingOS Founding Team</span>
@@ -42,7 +42,7 @@ export default function AboutPage() {
               href="/signup"
               className="px-6 py-2.5 rounded-full bg-[#74182E] text-white text-xs font-semibold hover:bg-[#581223]"
             >
-              Start Free Wedding
+              Start Free Occasion
             </Link>
           </div>
         </div>

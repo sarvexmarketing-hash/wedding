@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navigation = [
     { name: "Overview", href: "/admin", icon: LayoutDashboard },
-    { name: "Weddings Manager", href: "/admin/weddings", icon: Heart, badge: allWeddings.length.toString() },
+    { name: "Occasions Manager", href: "/admin/weddings", icon: Heart, badge: allWeddings.length.toString() },
     { name: "Templates Engine", href: "/admin/templates", icon: Layers, badge: "8" },
     { name: "Users & Accounts", href: "/admin/users", icon: Users, badge: "1.8k" },
     { name: "Subscriptions & GMV", href: "/admin/subscriptions", icon: CreditCard, badge: "₹84L" },

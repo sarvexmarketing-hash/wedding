@@ -254,7 +254,7 @@ export default function SignupPage() {
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <h2 className="text-3xl font-serif font-bold text-[#2D1B28]">
-              Wedding Workspace Initialized!
+              Occasion Workspace Initialized!
             </h2>
             <p className="text-xs text-[#7D597E] max-w-sm mx-auto">
               Your royal celebration for <strong className="text-[#74182E]">{createdWedding.coupleNames}</strong> is now live.
@@ -302,13 +302,13 @@ export default function SignupPage() {
             {/* PAGE TITLE & SUBTITLE */}
             <div className="text-center space-y-2 max-w-3xl mx-auto">
               <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#C5A059]">
-                WEDDINGOS • WEDDING SETUP
+                WEDDINGOS • OCCASION SETUP
               </p>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#2D1B28] tracking-tight">
-                Let&apos;s Begin Your Wedding Story
+                Let&apos;s Begin Your Occasion Story
               </h1>
               <p className="text-xs sm:text-sm text-[#7D597E] font-light max-w-xl mx-auto leading-relaxed">
-                Create your wedding workspace, invitations, RSVP system and guest experience — all in one place.
+                Create your occasion workspace, invitations, RSVP system and guest experience — all in one place.
               </p>
 
               {/* Decorative Floral Ornament */}
@@ -434,8 +434,8 @@ export default function SignupPage() {
                 <div className="text-center pt-1">
                   <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#2D1B28]">
                     {currentStep === 1 && "Tell us about the couple"}
-                    {currentStep === 2 && "Wedding Date & Venue"}
-                    {currentStep === 3 && "Personalize your wedding"}
+                    {currentStep === 2 && "Occasion Date & Venue"}
+                    {currentStep === 3 && "Personalize your occasion"}
                   </h3>
                   <p className="text-xs text-[#7D597E] mt-0.5 font-light">
                     {currentStep === 1 && "Let's start with the most important details."}
@@ -504,7 +504,7 @@ export default function SignupPage() {
                   <div className="space-y-4 pt-1">
                     <div>
                       <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                        Wedding Date *
+                        Occasion Date *
                       </label>
                       <div className="relative">
                         <Calendar className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
@@ -559,13 +559,13 @@ export default function SignupPage() {
                   <div className="space-y-4 pt-1">
                     <div>
                       <label className="block text-[11px] font-semibold text-stone-700 mb-1">
-                        Title (Surname Wedding)
+                        Title (Surname Occasion)
                       </label>
                       <div className="relative">
                         <Sparkles className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#C5A059]" />
                         <input
                           type="text"
-                          placeholder="e.g. The Sharma & Verma Wedding"
+                          placeholder="e.g. The Sharma & Verma Occasion"
                           value={weddingTitle}
                           onChange={(e) => setWeddingTitle(e.target.value)}
                           className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#E8DDCF] text-xs focus:border-[#74182E] focus:outline-none transition-colors"
@@ -776,10 +776,10 @@ export default function SignupPage() {
             <div className="pt-10 border-t border-[#E8DDCF]/80 space-y-4">
               <div className="text-center space-y-1">
                 <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#2D1B28]">
-                  Your Wedding Workspaces
+                  Your Occasion Workspaces
                 </h3>
                 <p className="text-xs text-[#7D597E] font-light">
-                  Manage your weddings, invitations and guests from one place.
+                  Manage your occasions, invitations and guests from one place.
                 </p>
               </div>
 

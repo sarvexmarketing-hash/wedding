@@ -17,7 +17,7 @@ export default function FeaturesGuestManagementPage() {
             Guest CRM
           </span>
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-[#2D1B28]">
-            A Structured CRM for Indian Weddings.
+            A Structured CRM for Indian Occasions.
           </h1>
           <p className="text-base sm:text-lg text-[#654566]">
             Keep hundreds of guests structured by side, family household, VIP status, and dietary requirements with instant CSV import and export.

@@ -64,7 +64,7 @@ export default function AdminUsersPage() {
       email: "vikram@shaadiproductions.in",
       phone: "+91 98110 33445",
       role: "Wedding Planner",
-      wedding: "14 Luxury Destination Weddings",
+      wedding: "14 Luxury Destination Occasions",
       status: "Verified Agency",
       lastLogin: "5 hours ago",
       plan: "Planner Agency Suite"

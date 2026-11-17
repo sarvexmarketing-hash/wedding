@@ -56,7 +56,7 @@ export default function PricingPage() {
     {
       id: "luxury",
       name: "Luxury Concierge",
-      tagline: "Bespoke technology for grand Indian weddings",
+      tagline: "Bespoke technology for grand Indian occasions",
       price: currency === "INR" ? "₹14,999" : "$179",
       period: "per wedding",
       badge: "Royal Experience",
@@ -198,7 +198,7 @@ export default function PricingPage() {
               Feature Deep-Dive
             </span>
             <h3 className="text-2xl font-serif font-bold text-[#2D1B28]">
-              Built Specifically for Indian Weddings
+              Built Specifically for Indian Occasions
             </h3>
             <p className="text-xs text-[#7D597E]">
               Why traditional generic invite tools fall short for multi-day, 800+ guest celebrations.

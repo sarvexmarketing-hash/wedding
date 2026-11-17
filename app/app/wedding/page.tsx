@@ -38,10 +38,10 @@ export default function WeddingProfilePage() {
           Celebration Profile
         </span>
         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2D1B28]">
-          Wedding Details
+          Occasion Details
         </h1>
         <p className="text-xs text-[#7D597E]">
-          Core settings and metadata for {wedding.coupleNames}&apos;s wedding celebrations.
+          Core settings and metadata for {wedding.coupleNames}&apos;s occasion celebrations.
         </p>
       </div>
 

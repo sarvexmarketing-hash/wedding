@@ -462,7 +462,7 @@ export default function TextCircle3D({
           3D Text Circle Kinetic Typography
         </div>
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-[#2D1B28] tracking-tight leading-tight">
-          Weddings, <span className="italic font-serif text-[#74182E]">Orchestrated in Orbit.</span>
+          Occasions, <span className="italic font-serif text-[#74182E]">Orchestrated in Orbit.</span>
         </h2>
       </div>
 

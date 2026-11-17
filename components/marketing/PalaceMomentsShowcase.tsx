@@ -100,7 +100,7 @@ export function PalaceMomentsShowcase() {
           <div className="space-y-1">
             <div className="flex items-center justify-center sm:justify-start gap-2 text-xs font-bold text-[#74182E] uppercase tracking-wider">
               <Heart className="w-4 h-4 fill-current text-[#74182E]" />
-              <span>Over 12,480 Weddings Elevated</span>
+              <span>Over 12,480 Occasions Elevated</span>
             </div>
             <h4 className="text-lg sm:text-xl font-serif font-bold text-[#2D1B28]">
               Ready to host your wedding like a system?

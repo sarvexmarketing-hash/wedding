@@ -34,7 +34,7 @@ export default function MultiEventPlanningPage() {
             Events & Ceremonies
           </h1>
           <p className="text-xs text-[#7D597E]">
-            Indian weddings are multi-event journeys. Track individual capacities, dietary splits, and check-ins for each function.
+            Indian occasions are multi-event journeys. Track individual capacities, dietary splits, and check-ins for each function.
           </p>
         </div>
 

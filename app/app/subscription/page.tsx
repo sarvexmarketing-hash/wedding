@@ -57,7 +57,7 @@ export default function WeddingSubscriptionPage() {
       id: "luxury",
       name: "Luxury Concierge",
       badge: "Enterprise",
-      description: "White-glove experience for high-profile palace destination weddings.",
+      description: "White-glove experience for high-profile palace destination occasions.",
       price: "Custom Quote",
       period: "tailored package",
       features: [

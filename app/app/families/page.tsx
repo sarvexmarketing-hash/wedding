@@ -37,7 +37,7 @@ export default function FamiliesPage() {
             Family Groups
           </h1>
           <p className="text-xs text-[#7D597E]">
-            Indian weddings are family-first. Heads of family can RSVP for all members in 1 click.
+            Indian occasions are family-first. Heads of family can RSVP for all members in 1 click.
           </p>
         </div>
 

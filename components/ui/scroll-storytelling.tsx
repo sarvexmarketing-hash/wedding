@@ -42,7 +42,7 @@ const steps: StoryStep[] = [
     stepName: "PLAN",
     title: "Structure Your Multi-Day Celebrations",
     subtitle: "Every muhurat, puja, sangeet, and reception mapped with surgical precision.",
-    description: "Indian weddings span 3 to 7 sacred ceremonies across multiple venues. WeddingOS lets you configure dress codes, schedules, maps, and specific invitation rules for every event.",
+    description: "Indian occasions span 3 to 7 sacred ceremonies across multiple venues. WeddingOS lets you configure dress codes, schedules, maps, and specific invitation rules for every event.",
     bulletPoints: [
       "Custom dress-code guidelines per ceremony",
       "Venue directions with Google Maps integration",

@@ -22,8 +22,8 @@ export function AppHeader({ onOpenAddGuest }: { onOpenAddGuest?: () => void }) {
   const [roleSelectOpen, setRoleSelectOpen] = useState(false);
 
   const rolesList: { id: Role; label: string; desc: string }[] = [
-    { id: "couple", label: "Couple & Family (Full Access)", desc: "Complete control of all wedding details" },
-    { id: "planner", label: "Wedding Planner", desc: "Guests, events, vendors, logistics & operations" },
+    { id: "couple", label: "Couple & Family (Full Access)", desc: "Complete control of all occasion details" },
+    { id: "planner", label: "Occasion Planner", desc: "Guests, events, vendors, logistics & operations" },
     { id: "caterer", label: "Catering Head", desc: "Food counts, Jain/Veg/Non-veg splits only" },
     { id: "transport", label: "Transport Manager", desc: "Arrivals, flight pickups, vehicle dispatch" },
     { id: "venue_staff", label: "Venue Gate Staff", desc: "QR check-in & seating table information" },

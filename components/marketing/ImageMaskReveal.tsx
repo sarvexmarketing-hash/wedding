@@ -59,7 +59,7 @@ const stages: MaskStage[] = [
     title: "Every Muhurat, Dress Code & Venue Route Mapped.",
     subtitle: "Mehendi · Haldi · Sangeet · Vedic Muhurat · Palace Reception",
     description:
-      "Indian weddings are multi-day celebrations spanning distinct venues. Provide your guests with personalized itineraries, curated attire color palettes for men and women, airport pickup tracking, and direct Google Maps navigation.",
+      "Indian occasions are multi-day celebrations spanning distinct venues. Provide your guests with personalized itineraries, curated attire color palettes for men and women, airport pickup tracking, and direct Google Maps navigation.",
     highlights: [
       "Chronological multi-event schedule with live Muhurat countdown",
       "Wardrobe guide: recommended colors & fabrics per ceremony",

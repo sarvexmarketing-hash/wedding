@@ -4,12 +4,12 @@ import { WeddingProvider } from "@/context/WeddingContext";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "WeddingOS — The Wedding Guest Operating System",
-  description: "Manage wedding invitations, RSVPs, guests, events, food preferences, logistics and check-in in one powerful platform. Run Your Wedding Like a System, Not a Spreadsheet.",
-  keywords: ["wedding os", "indian wedding management", "wedding guest CRM", "wedding rsvp platform", "luxury wedding operations", "catering intelligence", "wedding qr checkin"],
+  title: "WeddingOS — The Occasion Guest Operating System",
+  description: "Manage occasion invitations, RSVPs, guests, events, food preferences, logistics and check-in in one powerful platform. Run Your Occasion Like a System, Not a Spreadsheet.",
+  keywords: ["wedding os", "occasion management", "wedding guest CRM", "rsvp platform", "luxury occasion operations", "catering intelligence", "qr checkin"],
   openGraph: {
-    title: "WeddingOS — The Wedding Guest Operating System",
-    description: "Run Your Wedding Like a System, Not a Spreadsheet. Invitations, RSVPs, guest management, food planning, logistics, and live wedding operations.",
+    title: "WeddingOS — The Occasion Guest Operating System",
+    description: "Run Your Occasion Like a System, Not a Spreadsheet. Invitations, RSVPs, guest management, food planning, logistics, and live occasion operations.",
     url: "https://weddingos.com",
     siteName: "WeddingOS",
     locale: "en_US",
@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "WeddingOS — The Wedding Guest Operating System",
-    description: "Manage invitations, RSVPs, guests, events, food preferences, logistics, and live wedding operations from one beautiful workspace.",
+    title: "WeddingOS — The Occasion Guest Operating System",
+    description: "Manage invitations, RSVPs, guests, events, food preferences, logistics, and live occasion operations from one beautiful workspace.",
   },
 };
 

@@ -17,7 +17,7 @@ export default function PlannersSolutionPage() {
             For Wedding Planners & Agencies
           </span>
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-[#2D1B28]">
-            Manage 12+ Luxury Weddings Flawlessly.
+            Manage 12+ Luxury Occasions Flawlessly.
           </h1>
           <p className="text-base sm:text-lg text-[#654566]">
             Deliver an enterprise-grade hospitality experience to high-net-worth couples and families. Manage teams, vendor handshakes, airport shuttles, and day-of operations.
@@ -37,7 +37,7 @@ export default function PlannersSolutionPage() {
           <div className="p-6 bg-white rounded-3xl border border-[#E8DDCF] shadow-soft space-y-3">
             <h3 className="font-serif font-bold text-lg text-[#2D1B28]">Multi-Tenant Wedding Portal</h3>
             <p className="text-xs text-[#7D597E] leading-relaxed">
-              Switch seamlessly between all your upcoming weddings. Monitor RSVP velocity, guest counts, and remaining tasks in one view.
+              Switch seamlessly between all your upcoming occasions. Monitor RSVP velocity, guest counts, and remaining tasks in one view.
             </p>
           </div>
           <div className="p-6 bg-white rounded-3xl border border-[#E8DDCF] shadow-soft space-y-3">

@@ -21,7 +21,7 @@ export function SlowImageZoom({
   imageAlt = "Grand Royal Indian Wedding Celebration",
   tagline = "Cinematic Palace Experience",
   headline = "Where Centuries of Heritage Meet Effortless Modern Systems.",
-  subheadline = "Designed for the Grandest Multi-Day Indian Weddings",
+  subheadline = "Designed for the Grandest Multi-Day Indian Occasions",
   quote = "From royal palatial processions in Udaipur to sacred midnight muhurats in Hyderabad, WeddingOS ensures every single guest is received with unforgettable poise.",
   location = "Taj Falaknuma Palace · Lake Pichola Udaipur · Umaid Bhawan",
   className = ""

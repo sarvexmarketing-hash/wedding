@@ -49,7 +49,7 @@ export function AppSidebar() {
     { name: "Vendors & Food", href: "/app/vendors", icon: Briefcase, badge: null, roles: ["couple", "planner", "caterer"] },
     { name: "Live Check-in", href: "/app/check-in", icon: QrCode, badge: "Live", roles: ["couple", "planner", "venue_staff"] },
     { name: "AI Insights", href: "/app/insights", icon: BrainCircuit, badge: "AI", roles: ["couple", "planner"] },
-    { name: "Wedding Plans", href: "/app/subscription", icon: Crown, badge: "Plans", roles: ["couple", "planner"] },
+    { name: "Occasion Plans", href: "/app/subscription", icon: Crown, badge: "Plans", roles: ["couple", "planner"] },
     { name: "Planner Portal", href: "/app/planner", icon: Layers, badge: "12", roles: ["couple", "planner"] },
     { name: "Settings & RBAC", href: "/app/settings", icon: Settings, badge: null, roles: ["couple", "planner"] },
   ];
@@ -70,7 +70,7 @@ export function AppSidebar() {
         {/* Current Wedding Selector Card */}
         <div className="p-3 mx-3 my-3 bg-white rounded-xl border border-[#E8DDCF] shadow-soft-sm">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#74182E]">Active Wedding</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#74182E]">Active Occasion</span>
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           </div>
 
