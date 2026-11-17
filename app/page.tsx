@@ -89,10 +89,6 @@ export default function HomePage() {
                 className="text-[#74182E]"
               />
             </div>
-
-            <p className="text-sm sm:text-lg text-[#654566] max-w-2xl mx-auto font-sans leading-relaxed pt-3">
-              Invitations · Guest CRM · Real-Time RSVPs · Multi-Day Itineraries · Catering Intelligence · Palace Check-In
-            </p>
           </div>
 
           {/* Magnetic CTAs */}
