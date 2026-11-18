@@ -7,6 +7,7 @@ import { Footer } from "@/components/marketing/Footer";
 import { AllFeaturesSection } from "@/components/marketing/AllFeaturesSection";
 import FeaturesStoryScrollSection from "@/components/marketing/FeaturesStoryScrollSection";
 import { ParallaxScrollFeatureSection } from "@/components/ui/parallax-scroll-feature-section";
+import { HandwritingText } from "@/components/ui/handwriting-text";
 import { Sparkles, ArrowRight, ShieldCheck, CheckCircle2, Heart } from "lucide-react";
 
 export default function FeaturesOverviewPage() {
@@ -22,9 +23,20 @@ export default function FeaturesOverviewPage() {
             <span>The WeddingOS Platform Architecture</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-[#2D1B28] tracking-tight leading-[1.1]">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold text-[#2D1B28] tracking-tight leading-[1.15]">
             All Features. <br />
-            <span className="text-[#74182E]">One Unified Operating System.</span>
+            <span className="text-[#74182E] inline-flex items-center justify-center min-h-[1.25em]">
+              <HandwritingText
+                words={[
+                  "One Unified Operating System.",
+                  "Zero Spreadsheets.",
+                  "Royal Guest Operations.",
+                  "Your Occasion, Our Celebration."
+                ]}
+                className="text-[#74182E]"
+                height="1.15em"
+              />
+            </span>
           </h1>
 
           <p className="text-base sm:text-lg text-[#654566] max-w-2xl mx-auto font-sans leading-relaxed">
@@ -36,7 +48,7 @@ export default function FeaturesOverviewPage() {
               href="/signup"
               className="px-7 py-3.5 rounded-full bg-[#74182E] text-white font-serif font-bold text-sm shadow-soft hover:bg-[#581223] transition-all transform hover:-translate-y-0.5"
             >
-              Start Free Wedding Workspace
+              Start Free Occasion Workspace
             </Link>
             <Link
               href="/app"
