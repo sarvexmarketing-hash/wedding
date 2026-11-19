@@ -180,9 +180,9 @@ export default function FeaturesStoryScrollSection() {
             </p>
           </div>
           <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <p className="text-xs font-mono text-[#C5A059] uppercase tracking-wider mb-1">04 • Room Allocations</p>
+            <p className="text-xs font-mono text-[#C5A059] uppercase tracking-wider mb-1">04 • Decorators, Caters & Planners</p>
             <p className="text-xs text-white/80 leading-relaxed">
-              Directly map hotel suites, palace wings, and airport escort details per party.
+              Coordinate bespoke theme decorators, banquet caters, and luxury wedding planners.
             </p>
           </div>
         </div>

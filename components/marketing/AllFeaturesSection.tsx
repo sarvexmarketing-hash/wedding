@@ -148,19 +148,19 @@ export const allFeatures: FeatureItem[] = [
     ]
   },
   {
-    id: "logistics",
+    id: "vendors",
     category: "operations",
-    badge: "Fleet & Hospitality",
-    title: "Travel, Fleet & Room Allocations",
-    description: "Coordinate airport pickups, train terminal arrivals, driver vehicle assignments, and hotel room allotments across partner heritage palaces.",
-    href: "/features/guest-management",
-    icon: Car,
+    badge: "Vendors & Production",
+    title: "Decorators, Caters & Wedding Planners",
+    description: "Coordinate bespoke theme decorators, gourmet caters, and luxury wedding planners with seamless schedule synchronization and vendor SLAs.",
+    href: "/features/catering",
+    icon: Sparkles,
     themeColor: "#C5A059",
-    metric: { value: "Zero Delay", label: "Fleet Coordination" },
+    metric: { value: "Zero Chaos", label: "Vendor Coordination" },
     highlights: [
-      "Flight & train arrival synchronization",
-      "Hotel room allocations & family wings",
-      "Driver contact cards & live transit status"
+      "Floral, lighting & stage decor production tracking",
+      "Banquet caters headcount & dietary menu splits",
+      "Wedding planners task sync & multi-vendor itineraries"
     ]
   }
 ];
